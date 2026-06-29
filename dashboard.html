@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LPU Canteen Dashboard - Manage your campus dining experience">
+    <title>LPU Canteen - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <!-- ========== NAVBAR ========== -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-inner">
+
+            <!-- LEFT: Logo + Branding -->
+            <div class="nav-left">
+                <img src="lpu-logo.png" alt="LPU Logo" class="nav-logo-img">
+                <div class="nav-brand">
+                    <span class="nav-brand-line"><span class="orange">L</span>OVELY</span>
+                    <span class="nav-brand-line"><span class="orange">P</span>ROFESSIONAL</span>
+                    <span class="nav-brand-line"><span class="orange">U</span>NIVERSITY</span>
+                </div>
+            </div>
+
+            <!-- CENTER: Navigation Links -->
+            <nav class="nav-center" id="nav-center">
+                <a href="#" class="nav-link active" data-section="home">Home</a>
+                <a href="#" class="nav-link" data-section="explore">Explore</a>
+                <a href="#" class="nav-link" data-section="top-picks">Top Picks</a>
+                <a href="#" class="nav-link" data-section="offers">Offers</a>
+                <a href="#" class="nav-link" data-section="orders">My Orders</a>
+            </nav>
+
+            <!-- RIGHT: Search -->
+            <div class="nav-right">
+                <div class="nav-search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="nav-search-input" placeholder="Search canteens, cuisines, dishes...">
+                </div>
+            </div>
+
+            <!-- HAMBURGER (mobile) -->
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content" id="main-content">
+        <div id="page-home">
+
+        <!-- ========== HERO SECTION ========== -->
+        <section class="hero" id="hero">
+            <div class="hero-slider-bg" id="hero-bg">
+                <div class="hero-slide active" style="background-image: url('media__1778178384959.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('media__1778177976392.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('media__1778177976434.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('media__1778178457756.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('media__1778177976519.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('media__1778177976559.jpg');"></div>
+            </div>
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+                <div class="hero-left">
+                    <p class="hero-tag fade-in">Welcome to</p>
+                    <h1 class="hero-title fade-in delay-1"><span class="orange">LPU</span> Canteen</h1>
+                    <div class="hero-accent-line fade-in delay-1"></div>
+                    <p class="hero-sub fade-in delay-2">Great food. Great vibes. Great connections.</p>
+                    <p class="hero-desc fade-in delay-2">Discover the best canteens, explore menus and enjoy a delightful dining experience on campus.</p>
+                    <a href="#section-overview" class="hero-cta fade-in delay-3">
+                        <span>Explore Canteens</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Floating Stats Bar -->
+            <div class="hero-stats fade-in delay-3">
+                <div class="hero-stat">
+                    <div class="hero-stat-icon hs-orange">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                    </div>
+                    <div class="hero-stat-info">
+                        <span class="hero-stat-val">12+</span>
+                        <span class="hero-stat-lbl">Canteens</span>
+                    </div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-icon hs-green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <div class="hero-stat-info">
+                        <span class="hero-stat-val">200+</span>
+                        <span class="hero-stat-lbl">Dishes</span>
+                    </div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-icon hs-blue">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div class="hero-stat-info">
+                        <span class="hero-stat-val">25K+</span>
+                        <span class="hero-stat-lbl">Happy Students</span>
+                    </div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-icon hs-yellow">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <div class="hero-stat-info">
+                        <span class="hero-stat-val">4.5</span>
+                        <span class="hero-stat-lbl">Avg. Rating</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Indicators -->
+            <div class="hero-slider-indicators fade-in delay-3">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+                <div class="slider-dot" data-slide="4"></div>
+                <div class="slider-dot" data-slide="5"></div>
+            </div>
+        </section>
+
+        <!-- ========== SEARCH SECTION ========== -->
+        <section class="search-section">
+            <div class="search-section-inner">
+                <div class="quick-cats fade-in delay-1">
+                    <a href="#" class="qcat-card">
+                        <div class="qcat-icon qci-orange">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <div class="qcat-text">
+                            <span class="qcat-title">Explore Canteens</span>
+                            <span class="qcat-desc">Find canteens near you with live taps.</span>
+                        </div>
+                        <svg class="qcat-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+
+                    <a href="#" class="qcat-card">
+                        <div class="qcat-icon qci-purple">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <div class="qcat-text">
+                            <span class="qcat-title">Top Picks</span>
+                            <span class="qcat-desc">Check out top rated dishes and reviews.</span>
+                        </div>
+                        <svg class="qcat-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="#" class="qcat-card">
+                        <div class="qcat-icon qci-yellow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        </div>
+                        <div class="qcat-text">
+                            <span class="qcat-title">Offers & Deals</span>
+                            <span class="qcat-desc">Grab the latest discounts and exciting combos.</span>
+                        </div>
+                        <svg class="qcat-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== FEATURE CARDS ========== -->
+        <section class="features-section">
+            <div class="features-inner">
+                <div class="features-grid fade-in">
+                    <div class="feat-card feat-orange">
+                        <div class="feat-icon-wrap fi-orange">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <div class="feat-body">
+                            <h3 class="feat-title">Find Canteens</h3>
+                            <p class="feat-desc">Locate canteens near you in just a few taps.</p>
+                        </div>
+                        <div class="feat-arrow">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="feat-card feat-purple">
+                        <div class="feat-icon-wrap fi-purple">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <div class="feat-body">
+                            <h3 class="feat-title">Top Picks</h3>
+                            <p class="feat-desc">Check out top rated dishes and reviews.</p>
+                        </div>
+                        <div class="feat-arrow">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </div>
+                    </div>
+                    <div class="feat-card feat-yellow">
+                        <div class="feat-icon-wrap fi-yellow">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        </div>
+                        <div class="feat-body">
+                            <h3 class="feat-title">Offers & Deals</h3>
+                            <p class="feat-desc">Grab the best deals and exciting discounts.</p>
+                        </div>
+                        <div class="feat-arrow">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== FEATURED BANNER & SUPPORT ========== -->
+        <section class="banner-section fade-in delay-1">
+            <div class="banner-inner">
+                <!-- Promo Banner -->
+                <div class="promo-banner">
+                    <div class="promo-content">
+                        <span class="promo-subtitle">Good Food. Good Mood.</span>
+                        <h2 class="promo-title">Delicious food,<br>made for you!</h2>
+                        <p class="promo-desc">From hearty meals to quick bites, satisfy your cravings with a variety of cuisines.</p>
+                        <a href="#" class="promo-btn">
+                            Explore Menus
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                        
+                        <!-- Floating doodles (aesthetic) -->
+                        <div class="doodle doodle-1">
+                            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" stroke="var(--orange)" stroke-width="4" stroke-linecap="round"><path d="M10 50 Q 30 20, 50 50 T 90 50"/></svg>
+                        </div>
+                        <div class="doodle doodle-2">
+                            <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke="var(--orange)" stroke-width="4" stroke-linecap="round"><circle cx="50" cy="50" r="40" stroke-dasharray="10 15"/></svg>
+                        </div>
+                    </div>
+                    <div class="promo-image-wrap">
+                        <img src="food-banner.png" alt="Delicious Pasta" class="promo-img">
+                        <div class="promo-glow"></div>
+                    </div>
+                </div>
+
+                <!-- Support Bar -->
+                <div class="support-bar">
+                    <div class="support-left">
+                        <div class="support-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                        </div>
+                        <div class="support-text">
+                            <h4>We're here to help!</h4>
+                            <p>Have questions or feedback? Reach out to us.</p>
+                        </div>
+                    </div>
+                    <a href="mailto:lpu@mail.in" class="support-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        lpu@mail.in
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== INFO CARDS & CONTACT ========== -->
+        <section class="info-section fade-in">
+            <div class="info-inner">
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon" style="color:var(--orange);margin-bottom:12px">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h3>Hygienic & Safe</h3>
+                        <p>We maintain high standards of hygiene for your safety.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon" style="color:#10b981;margin-bottom:12px">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
+                        </div>
+                        <h3>Affordable Prices</h3>
+                        <p>Enjoy delicious food that fits your student budget.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon" style="color:#f43f5e;margin-bottom:12px">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </div>
+                        <h3>Made with Care</h3>
+                        <p>Every meal is prepared with love and quality ingredients.</p>
+                    </div>
+                </div>
+
+                <!-- Contact Bar -->
+                <div class="contact-bar">
+                    <div class="contact-left">
+                        <svg class="phone-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <span>01824-404404</span>
+                    </div>
+                    <div class="contact-dropdown">
+                        <div class="contact-btn" id="contact-us-btn" style="cursor: pointer;">
+                            Contact Us
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </div>
+                        <div class="contact-menu" id="contact-menu">
+                            <a href="tel:01824404404" class="contact-menu-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                Call Us
+                            </a>
+                            <a href="mailto:info@lpu.co.in" class="contact-menu-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                Email Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section fade-in" id="section-overview">
+
+            <!-- Explore Canteens -->
+            <div class="section-block fade-in delay-1">
+                <div class="section-header">
+                    <h2>🏢 Explore Canteens</h2>
+                    <a href="javascript:void(0)" class="view-all" id="view-all-canteens">View All</a>
+                </div>
+                <div class="canteen-grid">
+                    <div class="canteen-card" onclick="window.location.href='oven-xpress.html'">
+                        <img src="media__1778178717294.jpg" alt="Oven Xpress" class="canteen-img">
+                        <div class="canteen-info">
+                            <h3 class="canteen-name">Oven Xpress</h3>
+                        </div>
+                    </div>
+                    <div class="canteen-card" onclick="window.location.href='kitchenettee.html'">
+                        <img src="media__1778179014617.jpg" alt="Kitcher ettee" class="canteen-img">
+                        <div class="canteen-info">
+                            <h3 class="canteen-name">Kitcher ettee</h3>
+                        </div>
+                    </div>
+                    <div class="canteen-card" onclick="window.location.href='tea-point.html'">
+                        <img src="media__1778179242191.jpg" alt="Tea Point" class="canteen-img">
+                        <div class="canteen-info">
+                            <h3 class="canteen-name">Tea Point</h3>
+                        </div>
+                    </div>
+                    <div class="canteen-card" onclick="window.location.href='coffee-day.html'">
+                        <img src="media__1778179693818.jpg" alt="Coffee Day" class="canteen-img">
+                        <div class="canteen-info">
+                            <h3 class="canteen-name">Coffee Day</h3>
+                        </div>
+                    </div>
+                    <div class="canteen-card" onclick="window.location.href='fresh-juice.html'">
+                        <img src="media__1778181002956.jpg" alt="The fresh juice" class="canteen-img">
+                        <div class="canteen-info">
+                            <h3 class="canteen-name">The fresh juice</h3>
+                        </div>
+                    </div>
+                <!-- Extra canteens hidden by default -->
+
+                </div>
+            </div>
+            </div>
+
+        </section>
+        </div> <!-- End of page-home -->
+
+        <!-- ========== PAGE: ORDERS ========== -->
+        <div id="page-orders" style="display: none;">
+            <section class="dashboard-section fade-in">
+                <!-- Welcome -->
+                <div class="welcome-banner fade-in" style="margin-bottom: 28px;">
+                    <div class="welcome-text">
+                        <h1>My <span class="orange">Orders</span></h1>
+                        <p style="font-size: 1.1rem; margin-top: 8px; color: rgba(255,255,255,0.9);">Track your live orders and view past history</p>
+                    </div>
+                </div>
+
+                <!-- Search and Filters Bar -->
+                <div class="orders-filter-container fade-in delay-1">
+                    <div class="orders-search-box">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="orders-search" placeholder="Search by Token Number or Canteen...">
+                    </div>
+                    <div class="orders-filter-chips">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="active">Active</button>
+                        <button class="filter-chip" data-filter="completed">Completed</button>
+                        <button class="filter-chip" data-filter="cancelled">Cancelled</button>
+                    </div>
+                </div>
+
+                <!-- Orders List -->
+                <div id="orders-list" class="orders-list-wrapper fade-in delay-2">
+                    <!-- Dynamic order cards will be loaded here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="orders-empty-state" class="orders-empty-state fade-in delay-2" style="display: none;">
+                    <div class="empty-state-icon">🛍️</div>
+                    <h2>You haven't placed any orders yet.</h2>
+                    <p>Find the best food on campus and satisfy your cravings!</p>
+                    <button class="explore-btn" id="orders-explore-btn">Explore Canteens</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========== SUPPORT SECTION ========== -->
+        <section class="support-section fade-in delay-3">
+            <div class="support-container">
+                <div class="support-content">
+                    <div class="support-item">
+                        <div class="support-icon-wrap">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
+                        <div class="support-details">
+                            <span class="support-label">Email Us</span>
+                            <a href="mailto:lpu@mail.in" class="support-value">lpu@mail.in</a>
+                        </div>
+                    </div>
+                    
+                    <div class="support-divider"></div>
+                    
+                    <div class="support-item">
+                        <div class="support-icon-wrap">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </div>
+                        <div class="support-details">
+                            <span class="support-label">Call Us</span>
+                            <a href="tel:01824-404404" class="support-value">01824-404404</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#" class="support-cta">
+                    Contact Us
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
