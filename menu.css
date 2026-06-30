@@ -267,13 +267,28 @@
   border-radius: var(--radius-xl);
   padding: 24px;
   width: 320px;
+  max-width: calc(100vw - 32px);
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 15px 40px rgba(0,0,0,0.15);
   border: 1px solid var(--gray-200);
   z-index: 99;
   transition: transform 0.3s ease;
+  box-sizing: border-box;
 }
 .mini-cart:hover {
   transform: translateY(-5px);
+}
+
+/* Mini cart action buttons row */
+.mini-cart-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mini-cart-btns button {
+  flex: 1;
+  min-width: 110px;
 }
 .cart-header {
   display: flex;
@@ -394,21 +409,48 @@
   .offer-content { padding: 24px; }
   .offer-content h3 { font-size: 1.5rem; }
   .offer-content p { font-size: 0.95rem; }
-  .mini-cart { width: calc(100% - 32px); right: 16px; bottom: 16px; left: 16px; padding: 18px 20px; }
+  .mini-cart {
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+    max-height: 85vh;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    padding: 18px 20px;
+  }
+  .mini-cart-btns button { min-width: 100px; }
   .checkout-btn { padding: 16px; } /* Ensures min 48px touch target */
   .add-btn { padding: 12px 20px; } /* Ensures min 48px touch target */
 }
 
 @media (max-width: 480px) {
   .menu-hero-title { font-size: 1.8rem; }
-  .mini-cart { width: calc(100% - 24px); right: 12px; bottom: 12px; left: 12px; padding: 14px 16px; }
+  .mini-cart {
+    width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
+    max-height: 80vh;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    padding: 14px 16px;
+  }
+  .mini-cart-btns { flex-direction: column; }
+  .mini-cart-btns button { min-width: unset; width: 100%; }
 }
 
 @media (max-width: 360px) {
   .menu-hero-title { font-size: 1.45rem; }
   .menu-hero-tagline { font-size: 0.85rem; }
   .menu-hero-meta { font-size: 0.8rem; padding: 6px 12px; }
-  .mini-cart { width: calc(100% - 16px); right: 8px; bottom: 8px; left: 8px; padding: 10px 12px; }
+  .mini-cart {
+    width: calc(100% - 16px);
+    max-width: calc(100% - 16px);
+    max-height: 75vh;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    padding: 10px 12px;
+  }
   .cart-header h4 { font-size: 1rem; }
   .cart-total strong { font-size: 1.15rem; }
   .checkout-btn { padding: 12px; font-size: 0.9rem; }

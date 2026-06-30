@@ -124,9 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>Subtotal:</span>
                 <strong>₹${subtotal}</strong>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="view-cart-btn" style="flex: 1; padding: 12px; background: var(--gray-100); color: var(--gray-900); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="window.location.href='cart.html'">View Cart</button>
-                <button class="checkout-btn" style="flex: 1; padding: 12px; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="localStorage.setItem('cart', JSON.stringify(window.cart)); window.location.href='checkout.html'">Checkout</button>
+            <div class="mini-cart-btns">
+                <button class="view-cart-btn" style="padding: 12px; background: var(--gray-100); color: var(--gray-900); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="window.location.href='cart.html'">View Cart</button>
+                <button class="checkout-btn" style="padding: 12px; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="localStorage.setItem('cart', JSON.stringify(window.cart)); window.location.href='checkout.html'">Checkout</button>
             </div>
         `;
 
@@ -259,17 +259,64 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(overlay);
     }
 
+    function openSidebar() {
+        hamburger.classList.add('open');
+        navCenter.classList.add('open');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        hamburger.classList.remove('open');
+        navCenter.classList.remove('open');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
     if (hamburger && navCenter && overlay) {
+        // Inject a close (✕) button inside the sidebar if not already present
+        if (!navCenter.querySelector('.sidebar-close-btn')) {
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'sidebar-close-btn';
+            closeBtn.setAttribute('aria-label', 'Close menu');
+            closeBtn.innerHTML = '&#10005;';
+            closeBtn.style.cssText = [
+                'position:absolute',
+                'top:16px',
+                'right:16px',
+                'width:36px',
+                'height:36px',
+                'border:none',
+                'border-radius:50%',
+                'background:var(--gray-100)',
+                'color:var(--gray-700)',
+                'font-size:1rem',
+                'cursor:pointer',
+                'display:flex',
+                'align-items:center',
+                'justify-content:center',
+                'transition:background 0.2s'
+            ].join(';');
+            closeBtn.addEventListener('mouseenter', () => closeBtn.style.background = 'var(--gray-200)');
+            closeBtn.addEventListener('mouseleave', () => closeBtn.style.background = 'var(--gray-100)');
+            closeBtn.addEventListener('click', closeSidebar);
+            navCenter.insertBefore(closeBtn, navCenter.firstChild);
+        }
+
         hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('open');
-            navCenter.classList.toggle('open');
-            overlay.classList.toggle('show');
+            if (navCenter.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
         });
 
-        overlay.addEventListener('click', () => {
-            hamburger.classList.remove('open');
-            navCenter.classList.remove('open');
-            overlay.classList.remove('show');
+        // Close when overlay (backdrop) is clicked
+        overlay.addEventListener('click', closeSidebar);
+
+        // Close when any nav link inside sidebar is clicked
+        navCenter.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeSidebar);
         });
     }
 });
