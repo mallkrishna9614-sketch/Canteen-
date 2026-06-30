@@ -250,3 +250,116 @@ document.addEventListener('DOMContentLoaded', () => {
     setupMobile();
     window.addEventListener('resize', setupMobile);
 });
+
+// ===== LOGIN PAGE SKELETON LOADER =====
+const initSkeleton = () => {
+    const leftPanel = document.getElementById('left-panel');
+    const rightPanel = document.getElementById('right-panel');
+    if (!leftPanel || !rightPanel) return;
+
+    leftPanel.classList.add('content-loading-container');
+    rightPanel.classList.add('content-loading-container');
+
+    // Left Panel Skeleton overlay
+    const leftSkeleton = document.createElement('div');
+    leftSkeleton.className = 'skeleton-wrapper left-content';
+    leftSkeleton.id = 'left-skeleton';
+    leftSkeleton.setAttribute('aria-hidden', 'true');
+    leftSkeleton.innerHTML = `
+        <div>
+            <!-- Logo -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:30px;">
+                <div class="skeleton-block skeleton-circle" style="width:50px;height:50px;"></div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div class="skeleton-block" style="width:120px;height:12px;"></div>
+                    <div class="skeleton-block" style="width:140px;height:10px;"></div>
+                    <div class="skeleton-block" style="width:100px;height:10px;"></div>
+                </div>
+            </div>
+            <!-- Tagline -->
+            <div class="skeleton-block" style="width:200px;height:14px;margin-top:16px;"></div>
+        </div>
+        
+        <!-- Hero Text -->
+        <div style="margin-top:auto;margin-bottom:auto;padding:40px 0;">
+            <div class="skeleton-block" style="width:80%;height:32px;margin-bottom:12px;"></div>
+            <div class="skeleton-block" style="width:95%;height:16px;margin-bottom:8px;"></div>
+            <div class="skeleton-block" style="width:70%;height:16px;"></div>
+        </div>
+
+        <!-- Footer -->
+        <div style="display:flex;gap:20px;">
+            <div class="skeleton-block" style="width:140px;height:12px;"></div>
+            <div class="skeleton-block" style="width:100px;height:12px;"></div>
+        </div>
+    `;
+    leftPanel.appendChild(leftSkeleton);
+
+    // Right Panel Skeleton overlay
+    const rightSkeleton = document.createElement('div');
+    rightSkeleton.className = 'skeleton-wrapper';
+    rightSkeleton.id = 'right-skeleton';
+    rightSkeleton.setAttribute('aria-hidden', 'true');
+    rightSkeleton.style.padding = '32px';
+    rightSkeleton.style.display = 'flex';
+    rightSkeleton.style.flexDirection = 'column';
+    rightSkeleton.style.justifyContent = 'center';
+    rightSkeleton.style.alignItems = 'stretch';
+    rightSkeleton.style.height = '100%';
+    rightSkeleton.style.maxWidth = '420px';
+    rightSkeleton.style.margin = '0 auto';
+    rightSkeleton.innerHTML = `
+        <!-- Card header -->
+        <div class="skeleton-block" style="width:70%;height:28px;margin-bottom:12px;"></div>
+        <div class="skeleton-block" style="width:50%;height:14px;margin-bottom:16px;"></div>
+        <div class="skeleton-block" style="width:60px;height:4px;margin-bottom:32px;"></div>
+
+        <!-- Form inputs -->
+        <div style="margin-bottom:20px;">
+            <div class="skeleton-block" style="width:30%;height:12px;margin-bottom:8px;"></div>
+            <div class="skeleton-block" style="width:100%;height:46px;"></div>
+        </div>
+        <div style="margin-bottom:20px;">
+            <div class="skeleton-block" style="width:30%;height:12px;margin-bottom:8px;"></div>
+            <div class="skeleton-block" style="width:100%;height:46px;"></div>
+        </div>
+        <div style="margin-bottom:20px;">
+            <div class="skeleton-block" style="width:30%;height:12px;margin-bottom:8px;"></div>
+            <div class="skeleton-block" style="width:100%;height:46px;"></div>
+        </div>
+
+        <!-- Forgot link / checkbox -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <div class="skeleton-block" style="width:100px;height:14px;"></div>
+            <div class="skeleton-block" style="width:120px;height:14px;"></div>
+        </div>
+
+        <!-- Button -->
+        <div class="skeleton-block skeleton-button" style="width:100%;margin-bottom:24px;"></div>
+
+        <!-- Security notice -->
+        <div class="skeleton-block" style="width:100%;height:60px;"></div>
+    `;
+    rightPanel.appendChild(rightSkeleton);
+
+    const hideSkeleton = () => {
+        setTimeout(() => {
+            leftPanel.classList.add('loaded');
+            rightPanel.classList.add('loaded');
+            leftSkeleton.classList.add('fade-out');
+            rightSkeleton.classList.add('fade-out');
+            setTimeout(() => {
+                leftSkeleton.remove();
+                rightSkeleton.remove();
+            }, 300);
+        }, 600);
+    };
+
+    if (document.readyState === 'complete') {
+        hideSkeleton();
+    } else {
+        window.addEventListener('load', hideSkeleton);
+    }
+};
+
+initSkeleton();

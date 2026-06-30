@@ -273,3 +273,99 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ===== CANTEEN MENU PAGES SKELETON LOADER =====
+const initCanteenSkeleton = () => {
+    const mainContent = document.querySelector('.main-content');
+    if (!mainContent) return;
+
+    mainContent.classList.add('content-loading-container');
+
+    const skeletonWrapper = document.createElement('div');
+    skeletonWrapper.className = 'skeleton-wrapper';
+    skeletonWrapper.id = 'canteen-skeleton';
+    skeletonWrapper.setAttribute('aria-hidden', 'true');
+    skeletonWrapper.style.padding = '20px';
+    skeletonWrapper.style.background = '#fff';
+    skeletonWrapper.style.display = 'flex';
+    skeletonWrapper.style.flexDirection = 'column';
+    skeletonWrapper.style.gap = '32px';
+
+    skeletonWrapper.innerHTML = `
+        <!-- Hero Title Skeleton -->
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px;">
+            <div class="skeleton-block" style="width:250px;height:32px;border-radius:6px;"></div>
+            <div class="skeleton-block" style="width:180px;height:16px;border-radius:4px;"></div>
+        </div>
+
+        <!-- Category Filters Skeleton -->
+        <div style="display:flex;gap:12px;flex-wrap:wrap;overflow-x:auto;padding-bottom:10px;">
+            <div class="skeleton-block" style="width:100px;height:38px;border-radius:20px;flex-shrink:0;"></div>
+            <div class="skeleton-block" style="width:90px;height:38px;border-radius:20px;flex-shrink:0;"></div>
+            <div class="skeleton-block" style="width:90px;height:38px;border-radius:20px;flex-shrink:0;"></div>
+            <div class="skeleton-block" style="width:90px;height:38px;border-radius:20px;flex-shrink:0;"></div>
+            <div class="skeleton-block" style="width:100px;height:38px;border-radius:20px;flex-shrink:0;"></div>
+        </div>
+
+        <!-- Food Menu Grid Skeleton -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;">
+            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
+                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
+                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
+                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
+                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
+                </div>
+            </div>
+            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
+                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
+                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
+                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
+                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
+                </div>
+            </div>
+            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
+                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
+                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
+                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
+                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
+                </div>
+            </div>
+            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
+                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
+                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
+                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
+                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    mainContent.appendChild(skeletonWrapper);
+
+    const hideSkeleton = () => {
+        setTimeout(() => {
+            mainContent.classList.add('loaded');
+            skeletonWrapper.classList.add('fade-out');
+            setTimeout(() => {
+                skeletonWrapper.remove();
+            }, 300);
+        }, 600);
+    };
+
+    if (document.readyState === 'complete') {
+        hideSkeleton();
+    } else {
+        window.addEventListener('load', hideSkeleton);
+    }
+};
+
+initCanteenSkeleton();
+
