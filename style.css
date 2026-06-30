@@ -102,7 +102,7 @@ body{font-family:'Poppins',sans-serif;background:#f5f0eb;color:var(--gray-900);m
 
 /* ===== RIGHT PANEL ===== */
 .right-panel{
-  flex:0 0 40%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:0 0 40%;min-width:350px;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:40px 36px;background:var(--gray-50);position:relative;overflow-y:auto;
 }
 .right-panel::before{
@@ -146,10 +146,12 @@ body{font-family:'Poppins',sans-serif;background:#f5f0eb;color:var(--gray-900);m
 
 /* Password toggle */
 .toggle-pw{
-  position:absolute;right:14px;background:none;border:none;cursor:pointer;
-  color:var(--gray-400);display:flex;padding:4px;transition:var(--transition);
+  position:absolute;right:0;top:0;height:100%;width:46px;background:none;border:none;cursor:pointer;
+  color:var(--gray-400);display:flex;align-items:center;justify-content:center;transition:var(--transition);
+  z-index:2;
 }
 .toggle-pw:hover{color:var(--gray-500)}
+.input-wrap #password{padding-right:48px}
 
 
 /* Forgot link */
@@ -193,19 +195,22 @@ body{font-family:'Poppins',sans-serif;background:#f5f0eb;color:var(--gray-900);m
   .right-panel{flex:0 0 40%;padding:30px 28px}
   .left-content{padding:30px 32px 24px}
   .hero-text h1{font-size:2.2rem}
+  .left-footer{gap:12px;justify-content:space-between}
+  .footer-social{margin-left:0}
 }
 
 /* ===== RESPONSIVE — MOBILE ===== */
-@media(max-width:768px){
+@media(max-width:992px){
   .login-page{flex-direction:column}
 
   /* Left becomes hero */
   .left-panel{min-height:420px;align-items:stretch}
-  .left-content{padding:28px 24px 0;min-height:auto;justify-content:flex-start}
-  .tagline{margin-left:0;margin-top:4px;margin-bottom:16px}
-  .hero-text{margin-top:auto;margin-bottom:0;padding-bottom:30px}
+  .left-content{padding:28px 24px 0;min-height:auto;justify-content:flex-start;align-items:center}
+  .lpu-logo{justify-content:center;width:100%}
+  .tagline{margin-left:0;margin-top:4px;margin-bottom:16px;text-align:center;width:100%}
+  .hero-text{margin-top:auto;margin-bottom:0;padding-bottom:30px;text-align:center;display:flex;flex-direction:column;align-items:center;width:100%}
   .hero-text h1{font-size:1.9rem}
-  .hero-sub{font-size:.82rem}
+  .hero-sub{font-size:.82rem;margin:0 auto}
 
   /* Hide desktop-only items */
   .feature-cards,.left-footer{display:none}
@@ -213,7 +218,7 @@ body{font-family:'Poppins',sans-serif;background:#f5f0eb;color:var(--gray-900);m
 
   /* Right becomes full width */
   .right-panel{
-    flex:1;padding:0 20px 30px;
+    flex:1;min-width:0;padding:0 20px 30px;
     margin-top:-30px;position:relative;z-index:5;
     background:var(--white);border-radius:var(--radius-xl) var(--radius-xl) 0 0;
     box-shadow:0 -8px 30px rgba(0,0,0,0.1);
@@ -244,17 +249,23 @@ body{font-family:'Poppins',sans-serif;background:#f5f0eb;color:var(--gray-900);m
 
 /* Mobile Footer */
 .mobile-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 20px 24px;margin-top:16px;
-  background:var(--gray-900);border-radius:0;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  padding:24px 20px 30px;
+  background:var(--gray-900);border-radius:0;width:100%;text-align:center;
 }
-.mobile-footer a{color:var(--white);text-decoration:none;font-size:.78rem;display:flex;align-items:center;gap:6px}
-.mobile-footer .social-icons{display:flex;gap:6px}
+.mobile-footer-item{display:flex;align-items:center;justify-content:center;gap:8px;color:rgba(255,255,255,0.6);font-size:.78rem}
+.mobile-footer-item div{display:flex;flex-direction:column;gap:1px;text-align:center}
+.mobile-footer-item a{color:rgba(255,255,255,0.7);text-decoration:none;transition:var(--transition);font-size:.78rem}
+.mobile-footer-item a:hover{color:var(--orange)}
+.mobile-footer-social{display:flex;flex-direction:column;align-items:center;gap:10px}
+.mobile-footer-social>span{font-size:.72rem;color:rgba(255,255,255,0.5)}
+.mobile-footer .social-icons{display:flex;gap:8px}
 .mobile-footer .social-btn{
   width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:var(--orange);border:none;color:var(--white);transition:var(--transition);
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+  color:var(--white);transition:var(--transition);text-decoration:none;
 }
-.mobile-footer .social-btn:hover{transform:scale(1.1);background:var(--orange-light)}
+.mobile-footer .social-btn:hover{background:var(--orange);border-color:var(--orange);transform:scale(1.1)}
 
 @media(max-width:400px){
   .login-card h2{font-size:1.25rem}
@@ -270,4 +281,16 @@ body{font-family:'Poppins',sans-serif;background:#f5f0eb;color:var(--gray-900);m
   .input-wrap input, .input-wrap select{height:44px;font-size:0.8rem;padding:0 10px 0 38px}
   .field-icon{left:12px}
   .login-btn{height:46px;font-size:0.9rem}
+}
+
+/* ===== ACCESSIBILITY FOCUS ===== */
+.input-wrap input:focus-visible,
+.input-wrap select:focus-visible,
+.login-btn:focus-visible,
+.social-btn:focus-visible,
+.forgot-link:focus-visible,
+.footer-item a:focus-visible,
+.mobile-footer-item a:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
 }

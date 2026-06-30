@@ -211,7 +211,8 @@ document.querySelectorAll('#login-form input, #login-form select').forEach(el =>
 
 // ===== MOBILE FOOTER =====
 function setupMobile() {
-    if (window.innerWidth > 768) {
+    const breakpoint = 992;
+    if (window.innerWidth > breakpoint) {
         document.querySelectorAll('.mobile-footer').forEach(e => e.remove());
         return;
     }
@@ -219,8 +220,29 @@ function setupMobile() {
 
     const footer = document.createElement('div');
     footer.className = 'mobile-footer fade-in';
-    footer.innerHTML = '<a href="https://www.lpu.in" target="_blank">www.lpu.in</a>';
-    document.getElementById('right-panel').appendChild(footer);
+    footer.innerHTML = `
+        <div class="mobile-footer-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+                <span>Lovely Professional University</span>
+                <span>Phagwara, Punjab – 144411</span>
+            </div>
+        </div>
+        <div class="mobile-footer-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <a href="https://www.lpu.in" target="_blank">www.lpu.in</a>
+        </div>
+        <div class="mobile-footer-social">
+            <span>Follow us on</span>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/lpuuniversity/" target="_blank" aria-label="Instagram" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+                <a href="https://www.facebook.com/LPUUniversity/" target="_blank" aria-label="Facebook" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                <a href="https://x.com/lpuuniversity" target="_blank" aria-label="X" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                <a href="https://www.linkedin.com/school/h.l.-agrawal-b.ed.-college-betul/?originalSubdomain=in" target="_blank" aria-label="LinkedIn" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+            </div>
+        </div>
+    `;
+    document.getElementById('login-page').appendChild(footer);
 }
 
 // ===== INIT =====

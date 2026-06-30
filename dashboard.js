@@ -35,15 +35,17 @@ const navCenter = document.getElementById('nav-center');
 const overlay = document.getElementById('mobile-overlay');
 
 hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
+    const isOpen = hamburger.classList.toggle('open');
     navCenter.classList.toggle('open');
     overlay.classList.toggle('show');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
 });
 
 overlay.addEventListener('click', () => {
     hamburger.classList.remove('open');
     navCenter.classList.remove('open');
     overlay.classList.remove('show');
+    document.body.style.overflow = '';
 });
 
 // ===== NAV ACTIVE STATE & PAGE SWITCHING =====
@@ -55,6 +57,7 @@ document.querySelectorAll('.nav-link[data-section]').forEach(link => {
         hamburger.classList.remove('open');
         navCenter.classList.remove('open');
         overlay.classList.remove('show');
+        document.body.style.overflow = '';
 
         // Page switching logic
         const targetSection = link.getAttribute('data-section');
