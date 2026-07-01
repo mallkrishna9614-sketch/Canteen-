@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - LPU Canteen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        body { background: #f8f9fa; }
+        .cart-container { max-width: 900px; margin: 100px auto 50px; padding: 0 24px; }
+        .cart-card { background: #fff; padding: 32px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .cart-title { font-size: 2rem; font-weight: 800; margin-bottom: 24px; color: var(--gray-900); }
+        
+        .cart-items { margin-bottom: 30px; }
+        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid var(--gray-100); transition: all 0.3s; }
+        .cart-item:last-child { border-bottom: none; }
+        
+        .item-info { display: flex; align-items: center; gap: 20px; flex: 1; }
+        .item-img { width: 80px; height: 80px; border-radius: 16px; object-fit: cover; }
+        .item-details h4 { font-size: 1.2rem; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+        .desktop-price { font-size: 1rem; color: var(--orange); font-weight: 600; }
+        .mobile-price { display: none; }
+        
+        .item-controls { display: flex; align-items: center; gap: 15px; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--gray-100); font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .qty-btn:hover { background: var(--gray-200); }
+        .qty-display { font-weight: 700; width: 20px; text-align: center; }
+        .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; margin-left: 20px; transition: all 0.2s; }
+        .remove-btn:hover { transform: scale(1.1); }
+        
+        .cart-summary { background: var(--gray-50); padding: 24px; border-radius: 16px; margin-top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--gray-600); font-size: 1.05rem; }
+        .summary-row.total { border-top: 2px dashed var(--gray-200); padding-top: 16px; margin-top: 16px; font-size: 1.4rem; font-weight: 800; color: var(--gray-900); }
+        
+        .checkout-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--orange), #ff4500); color: white; border: none; border-radius: 16px; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; margin-top: 24px; }
+        .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255, 107, 0, 0.3); }
+        .empty-cart { text-align: center; padding: 40px; color: var(--gray-500); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .cart-container { margin: 80px auto 30px; padding: 0 16px; }
+            .cart-card { padding: 20px; border-radius: 18px; }
+            .cart-title { font-size: 1.6rem; margin-bottom: 18px; }
+            .cart-item { flex-direction: column; align-items: center; text-align: center; gap: 16px; padding: 20px 0; }
+            .item-info { flex-direction: column; align-items: center; gap: 12px; }
+            .item-img { width: 100px; height: 100px; border-radius: 12px; }
+            .item-details h4 { font-size: 1.1rem; }
+            .desktop-price { display: none; }
+            .mobile-price { display: block; font-size: 1.05rem; color: var(--orange); font-weight: 700; margin: 4px 0; }
+            .item-controls { justify-content: center; width: 100%; gap: 12px; }
+            .qty-btn { width: 48px; height: 48px; font-size: 1.1rem; border-radius: 10px; }
+            .remove-btn { margin-left: 10px; font-size: 1.4rem; padding: 6px; }
+            .checkout-btn { padding: 16px; font-size: 1.1rem; border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .cart-container { margin: 72px auto 20px; padding: 0 10px; }
+            .cart-card { padding: 16px 12px; }
+            .cart-title { font-size: 1.3rem; }
+            .qty-btn { width: 40px; height: 40px; }
+        }
+        @media (max-width: 360px) {
+            .cart-card { padding: 12px 8px; }
+            .cart-title { font-size: 1.25rem; }
+            .item-img { width: 80px; height: 80px; }
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <header class="navbar fade-in">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="dashboard.html" class="nav-logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">LPU<span class="orange">Canteen</span></span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <a href="javascript:history.back()" class="hero-cta" style="padding: 10px 20px; font-size: 0.85rem; text-decoration: none; background: var(--gray-100); color: var(--gray-900);">Back to Menu</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="cart-container">
+        <div class="cart-card">
+            <h1 class="cart-title">Your Cart</h1>
+            <div id="cart-items" class="cart-items">
+                <!-- Items populated by JS -->
+            </div>
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">₹0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Packaging Fee</span>
+                    <span>₹10</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Amount</span>
+                    <span id="total">₹0</span>
+                </div>
+                <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderCart() {
+            let storedCart = JSON.parse(localStorage.getItem('cart'));
+            cart = Array.isArray(storedCart) ? storedCart : [];
+            const container = document.getElementById('cart-items');
+            const summary = document.getElementById('cart-summary');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart"><h2>Your cart is empty</h2><p>Looks like you haven\'t added anything yet.</p></div>';
+                summary.style.display = 'none';
+                return;
+            }
+            
+            let html = '';
+            let subtotal = 0;
+            
+            cart.forEach((item, index) => {
+                let itemPrice = parseInt(item.price) || 0;
+                subtotal += itemPrice * item.quantity;
+                html += `
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <img src="${item.img}" class="item-img">
+                            <div class="item-details">
+                                <h4>${item.name}</h4>
+                                <p class="desktop-price">₹${itemPrice}</p>
+                            </div>
+                        </div>
+                        <div class="item-controls">
+                            <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                        </div>
+                        <div class="mobile-price">₹${itemPrice}</div>
+                        <button class="remove-btn" onclick="removeItem(${index})">🗑️</button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById('subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('total').textContent = `₹${subtotal + 10}`;
+            summary.style.display = 'block';
+        }
+
+        function showToast(message) {
+            let toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '100px';
+            toast.style.right = '30px';
+            toast.style.background = 'var(--gray-900)';
+            toast.style.color = '#fff';
+            toast.style.padding = '12px 24px';
+            toast.style.borderRadius = '8px';
+            toast.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+            toast.style.zIndex = '1000';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            toast.style.transition = 'all 0.3s ease';
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }, 10);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(20px)'; setTimeout(() => toast.remove(), 300); }, 2000);
+        }
+
+        function updateQty(index, change) {
+            let storedCart = JSON.parse(localStorage.getItem('cart'));
+            let cart = Array.isArray(storedCart) ? storedCart : [];
+            if (cart[index]) {
+                cart[index].quantity += change;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                    showToast("Item Removed");
+                } else {
+                    showToast("Cart Updated");
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+                window.dispatchEvent(new Event('storage'));
+            }
+        }
+
+        function removeItem(index) {
+            let storedCart = JSON.parse(localStorage.getItem('cart'));
+            let cart = Array.isArray(storedCart) ? storedCart : [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showToast("Item Removed");
+            renderCart();
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (!e.key || e.key === 'cart') {
+                renderCart();
+            }
+        });
+
+        // ===== CART SKELETON LOADER =====
+        function initCartSkeleton() {
+            const card = document.querySelector('.cart-card');
+            if (!card) return;
+
+            card.classList.add('content-loading-container');
+
+            const skeletonWrapper = document.createElement('div');
+            skeletonWrapper.className = 'skeleton-wrapper';
+            skeletonWrapper.id = 'cart-skeleton';
+            skeletonWrapper.setAttribute('aria-hidden', 'true');
+            skeletonWrapper.style.padding = '32px';
+            skeletonWrapper.style.background = '#fff';
+            skeletonWrapper.style.display = 'flex';
+            skeletonWrapper.style.flexDirection = 'column';
+            skeletonWrapper.style.gap = '24px';
+
+            skeletonWrapper.innerHTML = `
+                <!-- Cart Title -->
+                <div class="skeleton-block" style="width:200px;height:36px;margin-bottom:16px;"></div>
+
+                <!-- Cart Items List -->
+                <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:20px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid #f1f5f9;">
+                        <div style="display:flex;align-items:center;gap:20px;">
+                            <div class="skeleton-block" style="width:80px;height:80px;border-radius:12px;flex-shrink:0;"></div>
+                            <div style="display:flex;flex-direction:column;gap:6px;">
+                                <div class="skeleton-block" style="width:120px;height:16px;"></div>
+                                <div class="skeleton-block" style="width:60px;height:12px;"></div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="skeleton-block" style="width:80px;height:36px;border-radius:18px;"></div>
+                            <div class="skeleton-block" style="width:60px;height:18px;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid #f1f5f9;opacity:0.7;">
+                        <div style="display:flex;align-items:center;gap:20px;">
+                            <div class="skeleton-block" style="width:80px;height:80px;border-radius:12px;flex-shrink:0;"></div>
+                            <div style="display:flex;flex-direction:column;gap:6px;">
+                                <div class="skeleton-block" style="width:140px;height:16px;"></div>
+                                <div class="skeleton-block" style="width:60px;height:12px;"></div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="skeleton-block" style="width:80px;height:36px;border-radius:18px;"></div>
+                            <div class="skeleton-block" style="width:50px;height:18px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Summary -->
+                <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;border-top:1px solid #f1f5f9;padding-top:20px;">
+                    <div style="display:flex;justify-content:space-between;">
+                        <div class="skeleton-block" style="width:80px;height:14px;"></div>
+                        <div class="skeleton-block" style="width:60px;height:14px;"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;">
+                        <div class="skeleton-block" style="width:60px;height:14px;"></div>
+                        <div class="skeleton-block" style="width:50px;height:14px;"></div>
+                    </div>
+                    <div class="skeleton-block skeleton-button" style="width:100%;height:48px;margin-top:12px;"></div>
+                </div>
+            `;
+
+            card.appendChild(skeletonWrapper);
+
+            const hideSkeleton = () => {
+                setTimeout(() => {
+                    card.classList.add('loaded');
+                    skeletonWrapper.classList.add('fade-out');
+                    setTimeout(() => {
+                        skeletonWrapper.remove();
+                    }, 300);
+                }, 600);
+            };
+
+            if (document.readyState === 'complete') {
+                hideSkeleton();
+            } else {
+                window.addEventListener('load', hideSkeleton);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+            initCartSkeleton();
+        });
+    </script>
+</body>
+</html>

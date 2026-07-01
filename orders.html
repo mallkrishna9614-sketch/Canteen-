@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders - LPU Canteen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { background: #f8f9fa; }
+        .orders-wrapper { max-width: 800px; margin: 100px auto 50px; padding: 0 24px; }
+        .page-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; color: var(--gray-900); }
+        .order-card { background: #fff; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; border: 1px solid var(--gray-200); position: relative; overflow: hidden; }
+        .active-badge { position: absolute; top: 0; right: 0; background: var(--orange); color: white; padding: 6px 16px; font-size: 0.85rem; font-weight: 700; border-bottom-left-radius: 16px; }
+        .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; border-bottom: 1px solid var(--gray-100); padding-bottom: 20px; }
+        .order-token { font-size: 2.5rem; font-weight: 800; color: var(--gray-900); line-height: 1; margin-bottom: 8px; }
+        .order-id { color: var(--gray-500); font-size: 0.95rem; }
+        .canteen-name { font-weight: 700; color: var(--orange); font-size: 1.1rem; }
+        .rush-indicator { display: inline-flex; align-items: center; background: var(--gray-100); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; margin-top: 10px; }
+        .order-items { margin-bottom: 24px; }
+        .o-item { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--gray-700); font-size: 1rem; }
+        /* Timeline */
+        .timeline { position: relative; padding-left: 20px; margin-top: 30px; }
+        .timeline::before { content: ''; position: absolute; left: 6px; top: 10px; bottom: 20px; width: 2px; background: var(--gray-200); }
+        .timeline-step { position: relative; margin-bottom: 25px; display: flex; align-items: center; }
+        .timeline-step:last-child { margin-bottom: 0; }
+        .step-dot { position: absolute; left: -20px; width: 14px; height: 14px; border-radius: 50%; background: var(--gray-300); border: 2px solid #fff; z-index: 2; transition: all 0.5s; }
+        .step-text { font-size: 1rem; font-weight: 600; color: var(--gray-500); transition: all 0.5s; padding-left: 15px; }
+        .timeline-step.completed .step-dot { background: #4caf50; }
+        .timeline-step.completed .step-text { color: #4caf50; }
+        .timeline-step.active .step-dot { background: var(--orange); box-shadow: 0 0 0 4px rgba(255,107,0,0.2); }
+        .timeline-step.active .step-text { color: var(--orange); font-weight: 800; }
+        .timeline-step.active .step-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--orange); border-top-color: transparent; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .receipt-btn { background: var(--gray-100); color: var(--gray-900); border: 1px solid var(--gray-300); padding: 8px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; }
+        .receipt-btn:hover { background: var(--orange); color: white; border-color: var(--orange); }
+        .qr-container { padding: 10px; background: white; border: 1px solid var(--gray-200); border-radius: 12px; display: inline-block; margin-top: 15px; }
+        /* Token Modal */
+        .token-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .token-modal.show { opacity: 1; pointer-events: all; }
+        .token-card { background: white; padding: 40px; border-radius: 24px; text-align: center; max-width: 400px; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+        .token-modal.show .token-card { transform: scale(1); }
+        .token-card h2 { font-size: 1.5rem; color: var(--gray-900); margin-bottom: 10px; }
+        .token-card .big-token { font-size: 4rem; font-weight: 800; color: var(--orange); margin: 20px 0; letter-spacing: 2px; }
+        .token-card p { color: var(--gray-600); margin-bottom: 24px; }
+        .token-card button { background: var(--orange); color: white; border: none; padding: 14px 32px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        /* Live Status Badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; margin-top: 14px; }
+        .status-badge.paid      { background: #f0f0f0; color: #555; }
+        .status-badge.preparing { background: #fff3e8; color: #ff6b00; animation: pulse-orange 1.4s ease-in-out infinite; }
+        .status-badge.ready     { background: #e8f5e9; color: #22c55e; animation: glow-green 1.5s ease-in-out infinite; }
+        .status-badge.collected { background: #111; color: #fff; }
+        @keyframes pulse-orange { 0%,100%{ box-shadow:0 0 0 0 rgba(255,107,0,0.3); } 50%{ box-shadow:0 0 0 8px rgba(255,107,0,0); } }
+        @keyframes glow-green   { 0%,100%{ box-shadow:0 0 0 0 rgba(34,197,94,0.4); } 50%{ box-shadow:0 0 12px 4px rgba(34,197,94,0.25); } }
+        /* Live Timer */
+        .live-timer { display:inline-flex; align-items:center; gap:8px; background:#fff8f0; border:1px solid #ffd9b3; color:#cc5500; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.95rem; margin-top:12px; }
+        .live-timer .dot { width:8px; height:8px; border-radius:50%; background:#ff6b00; animation:blink 1s step-start infinite; }
+        @keyframes blink { 50%{ opacity:0; } }
+        /* Previous Reviews */
+        .prev-reviews { margin-top:20px; }
+        .prev-reviews h5 { font-size:0.95rem; font-weight:700; margin:0 0 12px; color:var(--gray-900); }
+        .prev-review-item { background:white; border-radius:12px; padding:14px 16px; margin-bottom:10px; border:1px solid var(--gray-100); }
+        .prev-review-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+        .prev-review-name { font-weight:700; font-size:0.88rem; }
+        .prev-review-date { font-size:0.78rem; color:var(--gray-500); }
+        .prev-review-stars { color:#f59e0b; font-size:0.9rem; margin-bottom:4px; }
+        .prev-review-text { font-size:0.88rem; color:var(--gray-600); }
+        /* Ready Popup */
+        .ready-popup { position: fixed; top: 90px; right: 24px; background: white; border-left: 5px solid #22c55e; border-radius: 16px; padding: 20px 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 9999; max-width: 320px; transform: translateX(calc(100% + 40px)); transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+        .ready-popup.show { transform: translateX(0); }
+        .ready-popup .rp-icon { font-size: 2rem; margin-bottom: 8px; }
+        .ready-popup h3 { margin: 0 0 5px; font-size: 1rem; color: #111; }
+        .ready-popup p { margin: 0; font-size: 0.85rem; color: #666; }
+        /* Review Section */
+        .review-section { margin-top: 24px; padding: 22px; background: #f8f9fa; border-radius: 16px; border: 1px dashed var(--gray-300); }
+        .review-section h4 { margin: 0 0 14px; font-size: 1rem; font-weight: 700; }
+        .stars { display: flex; gap: 6px; margin-bottom: 12px; }
+        .star { font-size: 1.6rem; cursor: pointer; transition: transform 0.15s; opacity: 0.35; }
+        .star.active { opacity: 1; transform: scale(1.15); }
+        .review-input { width: 100%; padding: 12px 16px; border: 1px solid var(--gray-300); border-radius: 12px; font-family: Poppins,sans-serif; font-size: 0.95rem; resize: vertical; min-height: 78px; outline: none; box-sizing: border-box; }
+        .review-input:focus { border-color: var(--orange); }
+        .submit-review-btn { margin-top: 12px; background: var(--orange); color: white; border: none; padding: 12px 26px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: opacity 0.2s; }
+        .submit-review-btn:hover { opacity: 0.85; }
+        .review-done { color: #22c55e; font-weight: 700; }
+        /* Recommendations */
+        .reco-section { margin-top: 24px; }
+        .reco-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 14px; color: var(--gray-900); }
+        .reco-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 12px; }
+        .reco-card { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid var(--gray-100); }
+        .reco-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+        .reco-emoji { font-size: 2rem; margin-bottom: 8px; }
+        .reco-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 3px; }
+        .reco-price { color: var(--orange); font-weight: 700; font-size: 0.88rem; }
+        .reco-canteen { color: var(--gray-500); font-size: 0.76rem; margin-top: 3px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .orders-wrapper { margin: 80px auto 30px; padding: 0 16px; }
+            .page-title { font-size: 1.8rem; margin-bottom: 20px; }
+            .order-card { padding: 20px; border-radius: 18px; margin-bottom: 20px; }
+            .order-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .order-token { font-size: 2rem; }
+            .active-badge { font-size: 0.75rem; padding: 4px 12px; border-bottom-left-radius: 12px; }
+            .receipt-btn { width: 100%; justify-content: center; padding: 12px; }
+            .prev-review-item { padding: 10px 12px; }
+            .reco-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .token-card { padding: 24px 20px; border-radius: 18px; width: 95%; max-width: 320px; }
+            .token-card .big-token { font-size: 3rem; margin: 14px 0; }
+        }
+        @media (max-width: 480px) {
+            .reco-grid { grid-template-columns: 1fr; }
+            .order-header { flex-direction: column; align-items: stretch; gap: 16px; }
+            .order-header > div:last-child { text-align: left !important; display: flex; flex-direction: column; align-items: flex-start; }
+            .order-card { padding: 16px; border-radius: 14px; }
+        }
+        @media (max-width: 360px) {
+            .orders-wrapper { padding: 0 10px; margin: 72px auto 20px; }
+            .page-title { font-size: 1.5rem; }
+            .order-token { font-size: 1.6rem; }
+            .order-id { font-size: 0.8rem; }
+            .status-badge { padding: 6px 12px; font-size: 0.8rem; }
+            .rush-indicator { padding: 6px 12px; font-size: 0.8rem; }
+            .live-timer { font-size: 0.85rem; padding: 6px 12px; }
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <header class="navbar fade-in">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="dashboard.html" class="nav-logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">LPU<span class="orange">Canteen</span></span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <a href="dashboard.html" class="hero-cta" style="padding:10px 20px;font-size:0.85rem;text-decoration:none;background:var(--gray-100);color:var(--gray-900);">Home</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="orders-wrapper">
+        <h1 class="page-title">Active Orders</h1>
+        <div id="orders-container"></div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="token-modal" id="tokenModal">
+        <div class="token-card">
+            <h2>Payment Successful!</h2>
+            <p>Your pickup token number is</p>
+            <div class="big-token" id="modalToken"></div>
+            <p>Please show this token at the counter.</p>
+            <button onclick="document.getElementById('tokenModal').classList.remove('show')">Track Order</button>
+        </div>
+    </div>
+
+    <!-- Ready Pickup Notification -->
+    <div class="ready-popup" id="readyPopup">
+        <div class="rp-icon">🔔</div>
+        <h3>Your Order Is Ready For Pickup!</h3>
+        <p>Head to the counter and show your token number.</p>
+    </div>
+
+    <!-- Hidden Receipt Template -->
+    <div id="receipt-template" style="position:absolute;top:-10000px;left:-10000px;display:block;padding:40px;background:white;width:600px;color:black;font-family:'Poppins',sans-serif;">
+        <h1 style="color:#ff6b00;text-align:center;margin-bottom:5px;">LPU Canteen</h1>
+        <h3 style="text-align:center;color:#555;margin-top:0;">Official Payment Receipt</h3>
+        <hr style="border:1px solid #eee;margin:20px 0;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
+            <div>
+                <p style="margin:4px 0;"><strong>Order ID:</strong> <span id="r-oid"></span></p>
+                <p style="margin:4px 0;"><strong>Date:</strong> <span id="r-date"></span></p>
+                <p style="margin:4px 0;"><strong>Reg No:</strong> <span id="r-reg"></span></p>
+                <p style="margin:4px 0;"><strong>Canteen:</strong> <span id="r-canteen"></span></p>
+            </div>
+            <div style="text-align:right;">
+                <p style="margin:4px 0;"><strong>Token:</strong> <span id="r-token" style="font-size:1.5rem;color:#ff6b00;font-weight:bold;"></span></p>
+                <p style="margin:4px 0;color:#4caf50;font-weight:700;">Status: Paid ✅</p>
+            </div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+            <thead>
+                <tr style="background:#f8f9fa;text-align:left;">
+                    <th style="padding:10px;border-bottom:2px solid #ddd;">Item</th>
+                    <th style="padding:10px;border-bottom:2px solid #ddd;">Qty</th>
+                    <th style="padding:10px;border-bottom:2px solid #ddd;text-align:right;">Price</th>
+                </tr>
+            </thead>
+            <tbody id="r-items"></tbody>
+        </table>
+        <div style="text-align:right;font-size:1.1rem;">
+            <p style="margin:4px 0;">Subtotal: <span id="r-sub"></span></p>
+            <p style="margin:4px 0;">Packaging Fee: ₹10</p>
+            <p style="font-weight:800;font-size:1.5rem;margin:10px 0 0;">Total: <span id="r-total"></span></p>
+        </div>
+        <div style="margin-top:40px;text-align:center;">
+            <div id="r-qr" style="display:inline-block;padding:15px;background:white;border:2px solid #eee;border-radius:12px;"></div>
+            <p style="margin-top:10px;font-size:0.9rem;color:#888;">Scan for order verification at pickup</p>
+        </div>
+    </div>
+
+    <script>
+        const statuses = ['Payment Successful','Preparing','Ready for Pickup','Collected'];
+        const API = 'https://backend1-i1jb.onrender.com';
+        const studentReg = localStorage.getItem('studentRegNo') || '';
+
+        // ===== LIVE COUNTDOWN TIMERS =====
+        const timerIntervals = {};
+        function startTimer(orderId, etaStr) {
+            const el = document.getElementById('timer-' + orderId);
+            if (!el) return;
+            let secs = parseInt(etaStr) * 60 || 600;
+            if (timerIntervals[orderId]) clearInterval(timerIntervals[orderId]);
+            timerIntervals[orderId] = setInterval(() => {
+                if (secs <= 0) { clearInterval(timerIntervals[orderId]); el.textContent = 'Almost ready!'; return; }
+                const m = String(Math.floor(secs/60)).padStart(2,'0');
+                const s = String(secs%60).padStart(2,'0');
+                el.textContent = m + ':' + s;
+                secs--;
+            }, 1000);
+        }
+
+        // ===== FETCH FROM BACKEND =====
+        async function fetchBackendOrders() {
+            if (!studentReg) return null;
+            try {
+                const r = await fetch(API + '/api/orders?reg=' + studentReg);
+                if (!r.ok) return null;
+                const data = await r.json();
+                return Array.isArray(data) ? data : null;
+            } catch { return null; }
+        }
+
+        // ===== PREVIOUS REVIEWS =====
+        function renderPreviousReviews() {
+            const reviews = JSON.parse(localStorage.getItem('canteenReviews') || '{}');
+            const entries = Object.values(reviews);
+            if (!entries.length) return '';
+            return '<div class="prev-reviews"><h5>💬 Previous Reviews</h5>' +
+                entries.map(r => {
+                    const stars = '⭐'.repeat(parseInt(r.rating) || 0);
+                    const d = new Date(r.date).toLocaleDateString('en-IN', {day:'numeric',month:'short'});
+                    return `<div class="prev-review-item">
+                        <div class="prev-review-meta"><span class="prev-review-name">You</span><span class="prev-review-date">${d}</span></div>
+                        <div class="prev-review-stars">${stars}</div>
+                        ${r.text ? `<div class="prev-review-text">${r.text}</div>` : ''}
+                    </div>`;
+                }).join('') + '</div>';
+        }
+
+        // ===== FOOD RECOMMENDATIONS =====
+        const RECO = [
+            { emoji:'🍔', name:'Veg Burger',      price:40,  canteen:'Oven Xpress' },
+            { emoji:'☕', name:'Masala Chai',     price:20,  canteen:'Tea Point' },
+            { emoji:'🧃', name:'Fresh Lime',      price:30,  canteen:'Fresh Juice' },
+            { emoji:'🍕', name:'Veg Pizza Slice', price:60,  canteen:'Oven Xpress' },
+            { emoji:'🥗', name:'Fruit Bowl',      price:50,  canteen:'Fresh Juice' },
+            { emoji:'🫖', name:'Lemon Tea',       price:25,  canteen:'Coffee Day' },
+        ];
+
+        // ===== READY NOTIFICATION =====
+        const notifiedSet = new Set(JSON.parse(localStorage.getItem('_notified') || '[]'));
+        function checkReadyNotification(orders) {
+            orders.forEach(o => {
+                const id = o.id || o._id || '';
+                const isReady = o.status === 'Ready for Pickup' || o.orderStatus === 'Ready';
+                if (isReady && !notifiedSet.has(id)) {
+                    notifiedSet.add(id);
+                    localStorage.setItem('_notified', JSON.stringify([...notifiedSet]));
+                    showReadyPopup();
+                }
+            });
+        }
+        function showReadyPopup() {
+            const p = document.getElementById('readyPopup');
+            p.classList.add('show');
+            setTimeout(() => p.classList.remove('show'), 6000);
+        }
+
+        // ===== STATUS BADGE =====
+        function getStatusBadge(status) {
+            const cls = {
+                'Payment Successful':'paid',
+                'Preparing':'preparing',
+                'Ready for Pickup':'ready',
+                'Ready':'ready',
+                'Collected':'collected',
+                'Completed':'collected'
+            }[status] || 'paid';
+            const icon = { paid:'💳', preparing:'👨‍🍳', ready:'✅', collected:'🎉' }[cls];
+            return `<div class="status-badge ${cls}">${icon} ${status}</div>`;
+        }
+
+        // ===== REVIEW SECTION =====
+        function renderReview(orderId) {
+            const reviews = JSON.parse(localStorage.getItem('canteenReviews') || '{}');
+            if (reviews[orderId]) return `<div class="review-section"><div class="review-done">⭐ Review submitted — Thank you!</div></div>`;
+            return `
+            <div class="review-section" id="review-${orderId}">
+                <h4>⭐ Rate Your Experience</h4>
+                <div class="stars" id="stars-${orderId}" data-rating="0">
+                    ${[1,2,3,4,5].map(n=>`<span class="star" onclick="setRating('${orderId}',${n})">⭐</span>`).join('')}
+                </div>
+                <textarea class="review-input" id="rtxt-${orderId}" placeholder="Tell us what you loved (optional)..."></textarea>
+                <button class="submit-review-btn" onclick="submitReview('${orderId}')">Submit Review</button>
+            </div>`;
+        }
+        window.setRating = function(orderId, val) {
+            const container = document.getElementById(`stars-${orderId}`);
+            container.setAttribute('data-rating', val);
+            container.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('active', i < val));
+        };
+        window.submitReview = function(orderId) {
+            const rating = document.getElementById(`stars-${orderId}`)?.getAttribute('data-rating') || 0;
+            const text = document.getElementById(`rtxt-${orderId}`)?.value || '';
+            const reviews = JSON.parse(localStorage.getItem('canteenReviews') || '{}');
+            reviews[orderId] = { rating, text, date: new Date().toISOString() };
+            localStorage.setItem('canteenReviews', JSON.stringify(reviews));
+            fetch('https://backend1-i1jb.onrender.com/api/reviews', {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({ orderId, rating, text })
+            }).catch(()=>{});
+            const el = document.getElementById(`review-${orderId}`);
+            if (el) el.outerHTML = `<div class="review-section"><div class="review-done">⭐ Thank you for your review!</div></div>`;
+        };
+
+        // ===== RECOMMENDATIONS =====
+        function renderRecommendations() {
+            const shuffled = [...RECO].sort(()=>Math.random()-0.5).slice(0,4);
+            return `<div class="reco-section">
+                <div class="reco-title">🍽️ Recommended For You</div>
+                <div class="reco-grid">
+                    ${shuffled.map(r=>`<div class="reco-card" onclick="window.location.href='dashboard.html'">
+                        <div class="reco-emoji">${r.emoji}</div>
+                        <div class="reco-name">${r.name}</div>
+                        <div class="reco-price">₹${r.price}</div>
+                        <div class="reco-canteen">${r.canteen}</div>
+                    </div>`).join('')}
+                </div>
+            </div>`;
+        }
+
+        // ===== RENDER ORDERS =====
+        function renderOrders() {
+            const orders = JSON.parse(localStorage.getItem('canteenOrders')) || [];
+            const container = document.getElementById('orders-container');
+            checkReadyNotification(orders);
+
+            if (orders.length === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-500)"><h2>No active orders</h2><p>You haven\'t placed any orders yet.</p></div>';
+                return;
+            }
+
+            let html = '';
+            orders.forEach((order) => {
+                const isCollected = order.status === 'Collected' || order.status === 'Completed';
+                let currentStatusIdx = statuses.indexOf(order.status);
+                if (currentStatusIdx === -1) currentStatusIdx = 0;
+
+                let itemsHtml = (order.items || []).map(i =>
+                    `<div class="o-item"><span>${i.quantity}x ${i.name}</span><span>₹${i.price * i.quantity}</span></div>`
+                ).join('');
+
+                let timelineHtml = '';
+                if (!isCollected) {
+                    timelineHtml = '<div class="timeline">' + statuses.map((s, idx) => {
+                        let cls = idx < currentStatusIdx ? 'completed' : idx === currentStatusIdx ? 'active' : '';
+                        return `<div class="timeline-step ${cls}"><div class="step-dot"></div><div class="step-text">${s}</div></div>`;
+                    }).join('') + '</div>';
+                }
+
+                const showReview = isCollected;
+                const showReco = isCollected;
+
+                html += `
+                <div class="order-card" style="${isCollected ? 'opacity:0.75;' : ''}">
+                    ${!isCollected ? '<div class="active-badge">Live</div>' : ''}
+                    <div class="order-header">
+                        <div>
+                            <div class="order-token">${order.token}</div>
+                            <div class="order-id">ID: ${order.id} • ${order.date}</div>
+                            ${getStatusBadge(order.status)}
+                            ${!isCollected ? `<div class="live-timer"><span class="dot"></span>Estimated Ready In: <span id="timer-${order.id}">--:--</span></div>` : ''}
+                            <div class="rush-indicator" style="margin-top:10px;">${order.rush} • ETA: ${order.eta}</div>
+                            <div style="margin-top:15px;">
+                                <button class="receipt-btn" onclick="downloadReceipt('${order.id}')">📄 Download Receipt</button>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="canteen-name">${order.canteen}</div>
+                            <div style="font-weight:700;margin-top:5px;font-size:1.2rem;">₹${order.total}</div>
+                            <div class="qr-container" id="qr-${order.id}"></div>
+                        </div>
+                    </div>
+                    <div class="order-items">${itemsHtml}</div>
+                    ${timelineHtml}
+                    ${showReview ? renderReview(order.id) : ''}
+                    ${showReview ? renderPreviousReviews() : ''}
+                    ${showReco ? renderRecommendations() : ''}
+                </div>`;
+            });
+
+            container.innerHTML = html;
+
+            // Render QR codes + start timers
+            orders.forEach(order => {
+                const qrEl = document.getElementById(`qr-${order.id}`);
+                if (qrEl) {
+                    qrEl.innerHTML = '';
+                    new QRCode(qrEl, { text: order.qrData || order.id, width:80, height:80, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H });
+                }
+                const isCollected = order.status === 'Collected' || order.status === 'Completed';
+                if (!isCollected) startTimer(order.id, parseInt(order.eta) || 10);
+            });
+        }
+
+        // ===== SIMULATE PROGRESS (demo mode) =====
+        function progressOrders() {
+            let orders = JSON.parse(localStorage.getItem('canteenOrders')) || [];
+            let changed = false;
+            orders.forEach(order => {
+                let idx = statuses.indexOf(order.status);
+                if (idx !== -1 && idx < statuses.length - 1 && Math.random() > 0.6) {
+                    order.status = statuses[idx + 1];
+                    changed = true;
+                }
+            });
+            if (changed) {
+                localStorage.setItem('canteenOrders', JSON.stringify(orders));
+                renderOrders();
+            }
+        }
+
+        // ===== DOWNLOAD RECEIPT =====
+        window.downloadReceipt = function(orderId) {
+            const btn = event.currentTarget;
+            const orig = btn.innerHTML;
+            btn.innerHTML = '⏳ Generating PDF...';
+            btn.disabled = true;
+            const orders = JSON.parse(localStorage.getItem('canteenOrders')) || [];
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            document.getElementById('r-oid').innerText = order.id;
+            document.getElementById('r-date').innerText = order.date;
+            document.getElementById('r-reg').innerText = order.regNo || 'N/A';
+            document.getElementById('r-canteen').innerText = order.canteen;
+            document.getElementById('r-token').innerText = order.token;
+            let itemsHtml = '', subtotal = 0;
+            order.items.forEach(i => {
+                itemsHtml += `<tr><td style="padding:10px;border-bottom:1px solid #eee;">${i.name}</td><td style="padding:10px;border-bottom:1px solid #eee;">${i.quantity}</td><td style="padding:10px;border-bottom:1px solid #eee;text-align:right;">₹${i.price*i.quantity}</td></tr>`;
+                subtotal += i.price * i.quantity;
+            });
+            document.getElementById('r-items').innerHTML = itemsHtml;
+            document.getElementById('r-sub').innerText = '₹' + subtotal;
+            document.getElementById('r-total').innerText = '₹' + order.total;
+            const rQr = document.getElementById('r-qr');
+            rQr.innerHTML = '';
+            new QRCode(rQr, { text: order.qrData || order.id, width:150, height:150, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H });
+            setTimeout(() => {
+                window.html2canvas(document.getElementById('receipt-template'), { scale:2, useCORS:true }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new window.jspdf.jsPDF('p','mm','a4');
+                    const w = pdf.internal.pageSize.getWidth();
+                    pdf.addImage(imgData,'PNG',0,0,w,(canvas.height*w)/canvas.width);
+                    pdf.save(`LPU_Receipt_${order.token}.pdf`);
+                    btn.innerHTML = orig; btn.disabled = false;
+                }).catch(err => { console.error(err); btn.innerHTML = orig; btn.disabled = false; });
+            }, 500);
+        };
+
+        // ===== ORDERS SKELETON LOADER =====
+        function initOrdersSkeleton() {
+            const container = document.getElementById('orders-container');
+            if (!container) return;
+
+            container.classList.add('content-loading-container');
+
+            const skeletonWrapper = document.createElement('div');
+            skeletonWrapper.className = 'skeleton-wrapper';
+            skeletonWrapper.id = 'orders-skeleton';
+            skeletonWrapper.setAttribute('aria-hidden', 'true');
+            skeletonWrapper.style.padding = '24px';
+            skeletonWrapper.style.background = '#f8f9fa';
+            skeletonWrapper.style.display = 'flex';
+            skeletonWrapper.style.flexDirection = 'column';
+            skeletonWrapper.style.gap = '24px';
+
+            skeletonWrapper.innerHTML = `
+                <div class="order-card skeleton-container" style="background:#fff;padding:24px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,0.03);">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+                        <div style="display:flex;flex-direction:column;gap:8px;">
+                            <div class="skeleton-block" style="width:120px;height:24px;border-radius:6px;"></div>
+                            <div class="skeleton-block" style="width:200px;height:12px;"></div>
+                            <div class="skeleton-block" style="width:80px;height:18px;border-radius:12px;"></div>
+                            <div class="skeleton-block" style="width:150px;height:12px;margin-top:8px;"></div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+                            <div class="skeleton-block" style="width:120px;height:18px;"></div>
+                            <div class="skeleton-block" style="width:60px;height:24px;"></div>
+                            <div class="skeleton-block" style="width:80px;height:80px;border-radius:12px;flex-shrink:0;"></div>
+                        </div>
+                    </div>
+                    <div style="border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:16px 0;margin-bottom:20px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                            <div class="skeleton-block" style="width:150px;height:14px;"></div>
+                            <div class="skeleton-block" style="width:50px;height:14px;"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;">
+                            <div class="skeleton-block" style="width:120px;height:14px;"></div>
+                            <div class="skeleton-block" style="width:40px;height:14px;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 20px;">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                            <div class="skeleton-block skeleton-circle" style="width:12px;height:12px;"></div>
+                            <div class="skeleton-block" style="width:60px;height:10px;"></div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                            <div class="skeleton-block skeleton-circle" style="width:12px;height:12px;"></div>
+                            <div class="skeleton-block" style="width:60px;height:10px;"></div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                            <div class="skeleton-block skeleton-circle" style="width:12px;height:12px;"></div>
+                            <div class="skeleton-block" style="width:60px;height:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(skeletonWrapper);
+
+            const hideSkeleton = () => {
+                setTimeout(() => {
+                    container.classList.add('loaded');
+                    skeletonWrapper.classList.add('fade-out');
+                    setTimeout(() => {
+                        skeletonWrapper.remove();
+                    }, 300);
+                }, 600);
+            };
+
+            if (document.readyState === 'complete') {
+                hideSkeleton();
+            } else {
+                window.addEventListener('load', hideSkeleton);
+            }
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            // Support both ?new_token (demo) and ?token (backend)
+            const newToken = params.get('new_token') || params.get('token');
+            if (newToken) {
+                document.getElementById('modalToken').textContent = newToken;
+                document.getElementById('tokenModal').classList.add('show');
+                window.history.replaceState({}, document.title, 'orders.html');
+            }
+            renderOrders();
+            initOrdersSkeleton();
+
+            // Try to sync from backend every 5s
+            async function pollBackend() {
+                const backendOrders = await fetchBackendOrders();
+                if (backendOrders && backendOrders.length > 0) {
+                    // Merge backend statuses into local orders
+                    let local = JSON.parse(localStorage.getItem('canteenOrders') || '[]');
+                    backendOrders.forEach(bo => {
+                        const match = local.find(l => l.id === bo._id || l.token === bo.tokenNumber);
+                        if (match) {
+                            match.status = bo.orderStatus || match.status;
+                        } else {
+                            // Add backend order to local list
+                            local.unshift({
+                                id: bo._id, token: bo.tokenNumber, regNo: bo.registrationNumber,
+                                canteen: bo.canteen, timeSlot: bo.pickupSlot,
+                                items: bo.items || [], total: bo.totalAmount,
+                                status: bo.orderStatus || 'Preparing',
+                                date: new Date(bo.createdAt || Date.now()).toLocaleString(),
+                                rush: '🟢 Live', eta: '10 mins', qrData: bo._id
+                            });
+                        }
+                    });
+                    localStorage.setItem('canteenOrders', JSON.stringify(local));
+                    renderOrders();
+                } else {
+                    progressOrders();
+                }
+            }
+            setInterval(pollBackend, 5000);
+        });
+    </script>
+</body>
+</html>

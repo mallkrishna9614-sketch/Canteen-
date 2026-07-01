@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oven Xpress - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body class="menu-page">
+    <!-- Navbar -->
+    <header class="navbar fade-in" style="background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="dashboard.html" class="nav-logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">LPU<span class="orange">Canteen</span></span>
+                </a>
+            </div>
+            <nav class="nav-center" id="nav-center">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Explore</a>
+                <a href="#" class="nav-link active">Menu</a>
+            </nav>
+            <div class="nav-right">
+                <a href="dashboard.html" class="hero-cta" style="padding: 10px 20px; font-size: 0.85rem; text-decoration: none;">Back to Dashboard</a>
+            </div>
+            <!-- HAMBURGER (mobile) -->
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <!-- Hero Section -->
+        <section class="menu-hero" style="background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('media__1778178717294.jpg');">
+            <div class="menu-hero-content">
+                <div class="menu-hero-badge">★ 4.8 Rating</div>
+                <h1 class="menu-hero-title">Oven Xpress</h1>
+                <p class="menu-hero-tagline">Fast snacks & fresh bites</p>
+                <div class="menu-hero-meta">
+                    <span>📍 Main Campus Area</span>
+                    <span>🕒 9:00 AM - 10:00 PM</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Filters -->
+        <section class="category-filters">
+            <div class="filter-container">
+                <button class="filter-btn active">All Items</button>
+                <button class="filter-btn">Snacks</button>
+                <button class="filter-btn">Meals</button>
+                <button class="filter-btn">Drinks</button>
+                <button class="filter-btn">Desserts</button>
+                <button class="filter-btn">Combos</button>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section class="menu-items-section">
+            <div class="menu-grid">
+                
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60" alt="Veg Burger" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Veg Burger</h3>
+                        <p class="food-desc">Delicious and freshly prepared veg burger.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹60</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=60" alt="Cheese Sandwich" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Cheese Sandwich</h3>
+                        <p class="food-desc">Delicious and freshly prepared cheese sandwich.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹50</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=500&q=60" alt="French Fries" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">French Fries</h3>
+                        <p class="food-desc">Delicious and freshly prepared french fries.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹40</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="media__1778183101395.jpg" alt="Cold Coffee" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Cold Coffee</h3>
+                        <p class="food-desc">Delicious and freshly prepared cold coffee.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹70</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=60" alt="Veg Wrap" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Veg Wrap</h3>
+                        <p class="food-desc">Delicious and freshly prepared veg wrap.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹80</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Mini Cart (Fixed at bottom right) -->
+    <div class="mini-cart">
+        <div class="cart-header">
+            <h4>Your Order</h4>
+            <span class="cart-count">2 Items</span>
+        </div>
+        <div class="cart-total">
+            <span>Subtotal:</span>
+            <strong>₹240</strong>
+        </div>
+        <button class="checkout-btn">Proceed to Checkout</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="menu-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <h3>Need Help?</h3>
+                <p>Email: <a href="mailto:support@lpu.co.in">support@lpu.co.in</a></p>
+                <p>Call: <a href="tel:01824404404">01824-404404</a></p>
+            </div>
+            <div class="footer-right">
+                <a href="dashboard.html" class="footer-btn">Back to Dashboard</a>
+            </div>
+        </div>
+    </footer>
+    <script src="cart.js?v=2"></script>
+</body>
+</html>

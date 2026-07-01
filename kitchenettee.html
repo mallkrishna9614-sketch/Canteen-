@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitcher ettee - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body class="menu-page">
+    <!-- Navbar -->
+    <header class="navbar fade-in" style="background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="dashboard.html" class="nav-logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">LPU<span class="orange">Canteen</span></span>
+                </a>
+            </div>
+            <nav class="nav-center" id="nav-center">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Explore</a>
+                <a href="#" class="nav-link active">Menu</a>
+            </nav>
+            <div class="nav-right">
+                <a href="dashboard.html" class="hero-cta" style="padding: 10px 20px; font-size: 0.85rem; text-decoration: none;">Back to Dashboard</a>
+            </div>
+            <!-- HAMBURGER (mobile) -->
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <!-- Hero Section -->
+        <section class="menu-hero" style="background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('media__1778179014617.jpg');">
+            <div class="menu-hero-content">
+                <div class="menu-hero-badge">★ 4.8 Rating</div>
+                <h1 class="menu-hero-title">Kitcher ettee</h1>
+                <p class="menu-hero-tagline">Delicious meals and combos</p>
+                <div class="menu-hero-meta">
+                    <span>📍 Block 38</span>
+                    <span>🕒 9:00 AM - 10:00 PM</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Filters -->
+        <section class="category-filters">
+            <div class="filter-container">
+                <button class="filter-btn active">All Items</button>
+                <button class="filter-btn">Snacks</button>
+                <button class="filter-btn">Meals</button>
+                <button class="filter-btn">Drinks</button>
+                <button class="filter-btn">Desserts</button>
+                <button class="filter-btn">Combos</button>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section class="menu-items-section">
+            <div class="menu-grid">
+                
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="media__1778183447481.jpg" alt="Paneer Butter Masala" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Paneer Butter Masala</h3>
+                        <p class="food-desc">Delicious and freshly prepared paneer butter masala.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹120</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=500&q=60" alt="Dal Makhani" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Dal Makhani</h3>
+                        <p class="food-desc">Delicious and freshly prepared dal makhani.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹90</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=500&q=60" alt="Butter Naan" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Butter Naan</h3>
+                        <p class="food-desc">Delicious and freshly prepared butter naan.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹20</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-img-wrap">
+                        <img src="media__1778183651996.jpg" alt="Aloo Paratha" class="food-img">
+                        <div class="food-type veg-icon"></div>
+                    </div>
+                    <div class="food-info">
+                        <h3 class="food-name">Aloo Paratha</h3>
+                        <p class="food-desc">Delicious and freshly prepared aloo paratha.</p>
+                        <div class="food-bottom">
+                            <span class="food-price">₹30</span>
+                            <button class="add-btn">Add +</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Mini Cart (Fixed at bottom right) -->
+    <div class="mini-cart">
+        <div class="cart-header">
+            <h4>Your Order</h4>
+            <span class="cart-count">2 Items</span>
+        </div>
+        <div class="cart-total">
+            <span>Subtotal:</span>
+            <strong>₹240</strong>
+        </div>
+        <button class="checkout-btn">Proceed to Checkout</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="menu-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <h3>Need Help?</h3>
+                <p>Email: <a href="mailto:support@lpu.co.in">support@lpu.co.in</a></p>
+                <p>Call: <a href="tel:01824404404">01824-404404</a></p>
+            </div>
+            <div class="footer-right">
+                <a href="dashboard.html" class="footer-btn">Back to Dashboard</a>
+            </div>
+        </div>
+    </footer>
+    <script src="cart.js?v=2"></script>
+</body>
+</html>
