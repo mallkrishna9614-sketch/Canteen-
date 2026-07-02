@@ -80,23 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalItems = 0;
         let subtotal = 0;
         
-        let itemsHtml = `<div class="cart-items-list" style="max-height: 220px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;">`;
+        let itemsHtml = `<div class="cart-items-list">`;
         window.cart.forEach((item, index) => {
             let itemPrice = parseInt(item.price) || 0;
             totalItems += item.quantity;
             subtotal += itemPrice * item.quantity;
             
             itemsHtml += `
-                <div class="mini-cart-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; animation: fadeIn 0.3s ease;">
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${item.name}</div>
-                        <div style="color: var(--orange); font-size: 0.9rem; font-weight: 700;">₹${itemPrice * item.quantity}</div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <button onclick="updateMiniCartQty(${index}, -1)" style="width: 26px; height: 26px; border-radius: 6px; border: none; background: var(--gray-100); color: var(--gray-900); cursor: pointer; font-weight: bold; transition: background 0.2s;">-</button>
-                        <span style="font-size: 0.95rem; font-weight: 600; min-width: 20px; text-align: center;">${item.quantity}</span>
-                        <button onclick="updateMiniCartQty(${index}, 1)" style="width: 26px; height: 26px; border-radius: 6px; border: none; background: var(--gray-100); color: var(--gray-900); cursor: pointer; font-weight: bold; transition: background 0.2s;">+</button>
-                        <button onclick="removeMiniCartItem(${index})" style="background: none; border: none; color: #ef4444; cursor: pointer; margin-left: 4px; font-size: 1.1rem; transition: transform 0.2s;">🗑️</button>
+                <div class="mini-cart-item">
+                    <div class="mini-cart-item-name">${item.name}</div>
+                    <div class="mini-cart-item-price">₹${itemPrice * item.quantity}</div>
+                    <div class="mini-cart-item-controls">
+                        <button onclick="updateMiniCartQty(${index}, -1)" class="mini-qty-btn">-</button>
+                        <span class="mini-qty-display">${item.quantity}</span>
+                        <button onclick="updateMiniCartQty(${index}, 1)" class="mini-qty-btn">+</button>
+                        <button onclick="removeMiniCartItem(${index})" class="mini-remove-btn">🗑️</button>
                     </div>
                 </div>
             `;
@@ -110,23 +108,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         miniCart.style.display = 'block';
         miniCart.innerHTML = `
-            <style>
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-                .cart-items-list::-webkit-scrollbar { width: 4px; }
-                .cart-items-list::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 10px; }
-            </style>
-            <div class="cart-header" style="margin-bottom: 12px;">
+            <div class="cart-header">
                 <h4>Your Order</h4>
                 <span class="cart-count">${totalItems} Item${totalItems !== 1 ? 's' : ''}</span>
             </div>
             ${itemsHtml}
-            <div class="cart-total" style="border-top: 2px dashed #eee; padding-top: 12px;">
+            <div class="cart-total">
                 <span>Subtotal:</span>
                 <strong>₹${subtotal}</strong>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="view-cart-btn" style="flex: 1; padding: 12px; background: var(--gray-100); color: var(--gray-900); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="window.location.href='cart.html'">View Cart</button>
-                <button class="checkout-btn" style="flex: 1; padding: 12px; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="localStorage.setItem('cart', JSON.stringify(window.cart)); window.location.href='checkout.html'">Checkout</button>
+            <div class="mini-cart-action-row">
+                <button class="view-cart-btn" onclick="window.location.href='cart.html'">View Cart</button>
+                <button class="checkout-btn" onclick="localStorage.setItem('cart', JSON.stringify(window.cart)); window.location.href='checkout.html'">Checkout</button>
             </div>
         `;
 
@@ -261,15 +254,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hamburger && navCenter && overlay) {
         hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('open');
+            const isOpen = hamburger.classList.toggle('open');
             navCenter.classList.toggle('open');
             overlay.classList.toggle('show');
+            document.body.classList.toggle('no-scroll', isOpen);
         });
 
         overlay.addEventListener('click', () => {
             hamburger.classList.remove('open');
             navCenter.classList.remove('open');
             overlay.classList.remove('show');
+            document.body.classList.remove('no-scroll');
         });
     }
 });
