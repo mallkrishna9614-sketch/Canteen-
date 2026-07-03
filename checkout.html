@@ -51,16 +51,19 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .checkout-container { gap: 24px; padding: 0 20px; margin: 80px auto 40px; }
+        @media (max-width: 1199px) {
+            .checkout-container { gap: 24px; padding: 0 20px; margin: 80px auto 40px; grid-template-columns: 1.1fr 1fr; }
             .checkout-card { padding: 24px; border-radius: 18px; }
             .checkout-title { font-size: 1.5rem; }
         }
+        @media (max-width: 991px) {
+            .checkout-container { grid-template-columns: 1fr; margin: 80px auto 30px; padding: 0 20px; gap: 20px; }
+            .payment-methods { grid-template-columns: 1fr; gap: 12px; }
+        }
         @media (max-width: 768px) {
-            .checkout-container { grid-template-columns: 1fr; margin: 80px auto 30px; padding: 0 16px; gap: 20px; }
+            .checkout-container { margin: 80px auto 30px; padding: 0 16px; }
             .checkout-card { padding: 20px; border-radius: 16px; }
             .checkout-title { font-size: 1.35rem; }
-            .payment-methods { grid-template-columns: 1fr; gap: 12px; }
             .payment-method { padding: 16px; font-size: 0.95rem; }
             .place-order-btn { padding: 16px; font-size: 1.1rem; border-radius: 12px; }
             .qty-btn { width: 44px; height: 44px; font-size: 1.1rem; border-radius: 8px; }
@@ -284,111 +287,11 @@
             renderCheckoutCart();
         }
 
-        // ===== CHECKOUT SKELETON LOADER =====
-        function initCheckoutSkeleton() {
-            const formCard = document.querySelector('.checkout-form');
-            const summaryCard = document.querySelector('.checkout-summary');
-            if (!formCard || !summaryCard) return;
-
-            formCard.classList.add('content-loading-container');
-            summaryCard.classList.add('content-loading-container');
-
-            const formSkeleton = document.createElement('div');
-            formSkeleton.className = 'skeleton-wrapper';
-            formSkeleton.id = 'form-skeleton';
-            formSkeleton.setAttribute('aria-hidden', 'true');
-            formSkeleton.style.padding = '32px';
-            formSkeleton.style.background = '#fff';
-            formSkeleton.style.display = 'flex';
-            formSkeleton.style.flexDirection = 'column';
-            formSkeleton.style.gap = '20px';
-            formSkeleton.innerHTML = `
-                <div class="skeleton-block" style="width:150px;height:24px;margin-bottom:12px;"></div>
-                <div>
-                    <div class="skeleton-block" style="width:100px;height:14px;margin-bottom:8px;"></div>
-                    <div class="skeleton-block" style="width:100%;height:44px;"></div>
-                </div>
-                <div>
-                    <div class="skeleton-block" style="width:130px;height:14px;margin-bottom:8px;"></div>
-                    <div class="skeleton-block" style="width:100%;height:44px;"></div>
-                </div>
-                <div>
-                    <div class="skeleton-block" style="width:100px;height:14px;margin-bottom:8px;"></div>
-                    <div class="skeleton-block" style="width:100%;height:44px;"></div>
-                </div>
-                <div>
-                    <div class="skeleton-block" style="width:120px;height:14px;margin-bottom:8px;"></div>
-                    <div class="skeleton-block" style="width:100%;height:44px;"></div>
-                </div>
-                <div class="skeleton-block" style="width:150px;height:24px;margin-top:20px;margin-bottom:12px;"></div>
-                <div style="display:flex;gap:16px;">
-                    <div class="skeleton-block" style="flex:1;height:54px;border-radius:12px;"></div>
-                    <div class="skeleton-block" style="flex:1;height:54px;border-radius:12px;"></div>
-                </div>
-            `;
-            formCard.appendChild(formSkeleton);
-
-            const summarySkeleton = document.createElement('div');
-            summarySkeleton.className = 'skeleton-wrapper';
-            summarySkeleton.id = 'summary-skeleton';
-            summarySkeleton.setAttribute('aria-hidden', 'true');
-            summarySkeleton.style.padding = '32px';
-            summarySkeleton.style.background = '#fff';
-            summarySkeleton.style.display = 'flex';
-            summarySkeleton.style.flexDirection = 'column';
-            summarySkeleton.style.gap = '16px';
-            summarySkeleton.innerHTML = `
-                <div class="skeleton-block" style="width:150px;height:24px;margin-bottom:12px;"></div>
-                <div style="display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">
-                    <div class="skeleton-block" style="width:100px;height:16px;"></div>
-                    <div class="skeleton-block" style="width:40px;height:16px;"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid #f1f5f9;opacity:0.7;">
-                    <div class="skeleton-block" style="width:120px;height:16px;"></div>
-                    <div class="skeleton-block" style="width:40px;height:16px;"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;margin-top:12px;">
-                    <div class="skeleton-block" style="width:80px;height:14px;"></div>
-                    <div class="skeleton-block" style="width:50px;height:14px;"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;">
-                    <div class="skeleton-block" style="width:60px;height:14px;"></div>
-                    <div class="skeleton-block" style="width:40px;height:14px;"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;border-top:1px solid #f1f5f9;padding-top:16px;margin-top:8px;">
-                    <div class="skeleton-block" style="width:90px;height:18px;"></div>
-                    <div class="skeleton-block" style="width:60px;height:18px;"></div>
-                </div>
-                <div class="skeleton-block skeleton-button" style="width:100%;height:48px;margin-top:16px;"></div>
-            `;
-            summaryCard.appendChild(summarySkeleton);
-
-            const hideSkeleton = () => {
-                setTimeout(() => {
-                    formCard.classList.add('loaded');
-                    summaryCard.classList.add('loaded');
-                    formSkeleton.classList.add('fade-out');
-                    summarySkeleton.classList.add('fade-out');
-                    setTimeout(() => {
-                        formSkeleton.remove();
-                        summarySkeleton.remove();
-                    }, 300);
-                }, 600);
-            };
-
-            if (document.readyState === 'complete') {
-                hideSkeleton();
-            } else {
-                window.addEventListener('load', hideSkeleton);
-            }
-        }
-
         // =============================================
         // DOM READY — render & auto-fill
         // =============================================
         document.addEventListener('DOMContentLoaded', function() {
             renderCheckoutCart();
-            initCheckoutSkeleton();
 
             var storedReg = localStorage.getItem('studentRegNo');
             if (storedReg) {

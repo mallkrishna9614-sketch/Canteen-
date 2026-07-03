@@ -211,8 +211,7 @@ document.querySelectorAll('#login-form input, #login-form select').forEach(el =>
 
 // ===== MOBILE FOOTER =====
 function setupMobile() {
-    const breakpoint = 992;
-    if (window.innerWidth > breakpoint) {
+    if (window.innerWidth > 768) {
         document.querySelectorAll('.mobile-footer').forEach(e => e.remove());
         return;
     }
@@ -220,29 +219,8 @@ function setupMobile() {
 
     const footer = document.createElement('div');
     footer.className = 'mobile-footer fade-in';
-    footer.innerHTML = `
-        <div class="mobile-footer-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <div>
-                <span>Lovely Professional University</span>
-                <span>Phagwara, Punjab – 144411</span>
-            </div>
-        </div>
-        <div class="mobile-footer-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <a href="https://www.lpu.in" target="_blank">www.lpu.in</a>
-        </div>
-        <div class="mobile-footer-social">
-            <span>Follow us on</span>
-            <div class="social-icons">
-                <a href="https://www.instagram.com/lpuuniversity/" target="_blank" aria-label="Instagram" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-                <a href="https://www.facebook.com/LPUUniversity/" target="_blank" aria-label="Facebook" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-                <a href="https://x.com/lpuuniversity" target="_blank" aria-label="X" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                <a href="https://www.linkedin.com/school/h.l.-agrawal-b.ed.-college-betul/?originalSubdomain=in" target="_blank" aria-label="LinkedIn" class="social-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-            </div>
-        </div>
-    `;
-    document.getElementById('login-page').appendChild(footer);
+    footer.innerHTML = '<a href="https://www.lpu.in" target="_blank">www.lpu.in</a>';
+    document.getElementById('right-panel').appendChild(footer);
 }
 
 // ===== INIT =====
@@ -250,116 +228,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setupMobile();
     window.addEventListener('resize', setupMobile);
 });
-
-// ===== LOGIN PAGE SKELETON LOADER =====
-const initSkeleton = () => {
-    const leftPanel = document.getElementById('left-panel');
-    const rightPanel = document.getElementById('right-panel');
-    if (!leftPanel || !rightPanel) return;
-
-    leftPanel.classList.add('content-loading-container');
-    rightPanel.classList.add('content-loading-container');
-
-    // Left Panel Skeleton overlay
-    const leftSkeleton = document.createElement('div');
-    leftSkeleton.className = 'skeleton-wrapper left-content';
-    leftSkeleton.id = 'left-skeleton';
-    leftSkeleton.setAttribute('aria-hidden', 'true');
-    leftSkeleton.innerHTML = `
-        <div>
-            <!-- Logo -->
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:30px;">
-                <div class="skeleton-block skeleton-circle" style="width:50px;height:50px;"></div>
-                <div style="display:flex;flex-direction:column;gap:6px;">
-                    <div class="skeleton-block" style="width:120px;height:12px;"></div>
-                    <div class="skeleton-block" style="width:140px;height:10px;"></div>
-                    <div class="skeleton-block" style="width:100px;height:10px;"></div>
-                </div>
-            </div>
-            <!-- Tagline -->
-            <div class="skeleton-block" style="width:200px;height:14px;margin-top:16px;"></div>
-        </div>
-        
-        <!-- Hero Text -->
-        <div style="margin-top:auto;margin-bottom:auto;padding:40px 0;">
-            <div class="skeleton-block" style="width:80%;height:32px;margin-bottom:12px;"></div>
-            <div class="skeleton-block" style="width:95%;height:16px;margin-bottom:8px;"></div>
-            <div class="skeleton-block" style="width:70%;height:16px;"></div>
-        </div>
-
-        <!-- Footer -->
-        <div style="display:flex;gap:20px;">
-            <div class="skeleton-block" style="width:140px;height:12px;"></div>
-            <div class="skeleton-block" style="width:100px;height:12px;"></div>
-        </div>
-    `;
-    leftPanel.appendChild(leftSkeleton);
-
-    // Right Panel Skeleton overlay
-    const rightSkeleton = document.createElement('div');
-    rightSkeleton.className = 'skeleton-wrapper';
-    rightSkeleton.id = 'right-skeleton';
-    rightSkeleton.setAttribute('aria-hidden', 'true');
-    rightSkeleton.style.padding = '32px';
-    rightSkeleton.style.display = 'flex';
-    rightSkeleton.style.flexDirection = 'column';
-    rightSkeleton.style.justifyContent = 'center';
-    rightSkeleton.style.alignItems = 'stretch';
-    rightSkeleton.style.height = '100%';
-    rightSkeleton.style.maxWidth = '420px';
-    rightSkeleton.style.margin = '0 auto';
-    rightSkeleton.innerHTML = `
-        <!-- Card header -->
-        <div class="skeleton-block" style="width:70%;height:28px;margin-bottom:12px;"></div>
-        <div class="skeleton-block" style="width:50%;height:14px;margin-bottom:16px;"></div>
-        <div class="skeleton-block" style="width:60px;height:4px;margin-bottom:32px;"></div>
-
-        <!-- Form inputs -->
-        <div style="margin-bottom:20px;">
-            <div class="skeleton-block" style="width:30%;height:12px;margin-bottom:8px;"></div>
-            <div class="skeleton-block" style="width:100%;height:46px;"></div>
-        </div>
-        <div style="margin-bottom:20px;">
-            <div class="skeleton-block" style="width:30%;height:12px;margin-bottom:8px;"></div>
-            <div class="skeleton-block" style="width:100%;height:46px;"></div>
-        </div>
-        <div style="margin-bottom:20px;">
-            <div class="skeleton-block" style="width:30%;height:12px;margin-bottom:8px;"></div>
-            <div class="skeleton-block" style="width:100%;height:46px;"></div>
-        </div>
-
-        <!-- Forgot link / checkbox -->
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-            <div class="skeleton-block" style="width:100px;height:14px;"></div>
-            <div class="skeleton-block" style="width:120px;height:14px;"></div>
-        </div>
-
-        <!-- Button -->
-        <div class="skeleton-block skeleton-button" style="width:100%;margin-bottom:24px;"></div>
-
-        <!-- Security notice -->
-        <div class="skeleton-block" style="width:100%;height:60px;"></div>
-    `;
-    rightPanel.appendChild(rightSkeleton);
-
-    const hideSkeleton = () => {
-        setTimeout(() => {
-            leftPanel.classList.add('loaded');
-            rightPanel.classList.add('loaded');
-            leftSkeleton.classList.add('fade-out');
-            rightSkeleton.classList.add('fade-out');
-            setTimeout(() => {
-                leftSkeleton.remove();
-                rightSkeleton.remove();
-            }, 300);
-        }, 600);
-    };
-
-    if (document.readyState === 'complete') {
-        hideSkeleton();
-    } else {
-        window.addEventListener('load', hideSkeleton);
-    }
-};
-
-initSkeleton();

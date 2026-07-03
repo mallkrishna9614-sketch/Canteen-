@@ -35,17 +35,15 @@ const navCenter = document.getElementById('nav-center');
 const overlay = document.getElementById('mobile-overlay');
 
 hamburger.addEventListener('click', () => {
-    const isOpen = hamburger.classList.toggle('open');
+    hamburger.classList.toggle('open');
     navCenter.classList.toggle('open');
     overlay.classList.toggle('show');
-    document.body.style.overflow = isOpen ? 'hidden' : '';
 });
 
 overlay.addEventListener('click', () => {
     hamburger.classList.remove('open');
     navCenter.classList.remove('open');
     overlay.classList.remove('show');
-    document.body.style.overflow = '';
 });
 
 // ===== NAV ACTIVE STATE & PAGE SWITCHING =====
@@ -57,7 +55,6 @@ document.querySelectorAll('.nav-link[data-section]').forEach(link => {
         hamburger.classList.remove('open');
         navCenter.classList.remove('open');
         overlay.classList.remove('show');
-        document.body.style.overflow = '';
 
         // Page switching logic
         const targetSection = link.getAttribute('data-section');
@@ -531,7 +528,7 @@ async function loadStudentOrders() {
     const emptyState = document.getElementById('orders-empty-state');
     if (!listContainer) return;
     
-    listContainer.innerHTML = getOrdersSkeletonHTML();
+    listContainer.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-500)"><p>Loading your orders...</p></div>';
     if (emptyState) emptyState.style.display = 'none';
     listContainer.style.display = 'block';
     
@@ -645,119 +642,18 @@ function setupOrdersFilters() {
 // Initialize filters
 setupOrdersFilters();
 
-// ===== ORDERS SKELETON GENERATOR =====
-function getOrdersSkeletonHTML() {
-    return `
-        <div class="zomato-order-card skeleton-container" aria-hidden="true" style="padding: 20px;">
-            <div class="order-card-summary" style="display:flex; justify-content:space-between; align-items:center;">
-                <div class="order-card-left" style="display:flex; gap:16px; align-items:center;">
-                    <div class="skeleton-block skeleton-circle" style="width:40px;height:40px;flex-shrink:0;"></div>
-                    <div style="display:flex; flex-direction:column; gap:6px;">
-                        <div class="skeleton-block" style="width:140px;height:16px;"></div>
-                        <div class="skeleton-block" style="width:200px;height:12px;"></div>
-                        <div class="skeleton-block" style="width:80px;height:18px;border-radius:12px;"></div>
-                    </div>
-                </div>
-                <div class="order-card-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
-                    <div class="skeleton-block" style="width:100px;height:32px;border-radius:16px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="zomato-order-card skeleton-container" aria-hidden="true" style="padding: 20px; opacity:0.7;">
-            <div class="order-card-summary" style="display:flex; justify-content:space-between; align-items:center;">
-                <div class="order-card-left" style="display:flex; gap:16px; align-items:center;">
-                    <div class="skeleton-block skeleton-circle" style="width:40px;height:40px;flex-shrink:0;"></div>
-                    <div style="display:flex; flex-direction:column; gap:6px;">
-                        <div class="skeleton-block" style="width:120px;height:16px;"></div>
-                        <div class="skeleton-block" style="width:180px;height:12px;"></div>
-                        <div class="skeleton-block" style="width:80px;height:18px;border-radius:12px;"></div>
-                    </div>
-                </div>
-                <div class="order-card-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-                    <div class="skeleton-block" style="width:50px;height:20px;"></div>
-                    <div class="skeleton-block" style="width:100px;height:32px;border-radius:16px;"></div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// ===== DASHBOARD OVERVIEW SKELETON LOADER =====
-const initDashboardSkeleton = () => {
-    const pageHome = document.getElementById('page-home');
-    if (!pageHome) return;
-
-    pageHome.classList.add('content-loading-container');
-
-    const skeletonWrapper = document.createElement('div');
-    skeletonWrapper.className = 'skeleton-wrapper';
-    skeletonWrapper.id = 'dashboard-skeleton';
-    skeletonWrapper.setAttribute('aria-hidden', 'true');
-    skeletonWrapper.style.padding = '20px 40px';
-    skeletonWrapper.style.display = 'flex';
-    skeletonWrapper.style.flexDirection = 'column';
-    skeletonWrapper.style.gap = '40px';
-    skeletonWrapper.style.background = '#f8f9fa';
-
-    skeletonWrapper.innerHTML = `
-        <!-- Hero section skeleton -->
-        <div class="skeleton-block" style="width:100%;height:350px;border-radius:24px;"></div>
-
-        <!-- Quick Categories -->
-        <div style="display:flex;gap:20px;flex-wrap:wrap;">
-            <div class="skeleton-block" style="flex:1;min-width:250px;height:120px;border-radius:16px;"></div>
-            <div class="skeleton-block" style="flex:1;min-width:250px;height:120px;border-radius:16px;"></div>
-            <div class="skeleton-block" style="flex:1;min-width:250px;height:120px;border-radius:16px;"></div>
-        </div>
-
-        <!-- Features Section -->
-        <div style="display:flex;gap:20px;flex-wrap:wrap;">
-            <div class="skeleton-block" style="flex:1;min-width:280px;height:160px;border-radius:20px;"></div>
-            <div class="skeleton-block" style="flex:1;min-width:280px;height:160px;border-radius:20px;"></div>
-            <div class="skeleton-block" style="flex:1;min-width:280px;height:160px;border-radius:20px;"></div>
-        </div>
-
-        <!-- Explore Canteens section header -->
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
-            <div class="skeleton-block" style="width:200px;height:24px;"></div>
-            <div class="skeleton-block" style="width:80px;height:16px;"></div>
-        </div>
-
-        <!-- Restaurant Grid Skeletons -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;">
-            <div style="border-radius:20px;overflow:hidden;background:#fff;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,0.02);">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:12px;"></div>
-                <div class="skeleton-block" style="width:60%;height:20px;"></div>
-            </div>
-            <div style="border-radius:20px;overflow:hidden;background:#fff;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,0.02);">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:12px;"></div>
-                <div class="skeleton-block" style="width:60%;height:20px;"></div>
-            </div>
-            <div style="border-radius:20px;overflow:hidden;background:#fff;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,0.02);">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:12px;"></div>
-                <div class="skeleton-block" style="width:60%;height:20px;"></div>
-            </div>
-        </div>
-    `;
-    pageHome.appendChild(skeletonWrapper);
-
-    const hideSkeleton = () => {
-        setTimeout(() => {
-            pageHome.classList.add('loaded');
-            skeletonWrapper.classList.add('fade-out');
-            setTimeout(() => {
-                skeletonWrapper.remove();
-            }, 300);
-        }, 600);
-    };
-
-    if (document.readyState === 'complete') {
-        hideSkeleton();
-    } else {
-        window.addEventListener('load', hideSkeleton);
+// Ensure mobile nav closes when any link inside it is clicked
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.getElementById('nav-hamburger');
+    const navCenter = document.getElementById('nav-center');
+    const overlay = document.getElementById('mobile-overlay');
+    if (navCenter && hamburger && overlay) {
+        navCenter.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navCenter.classList.remove('open');
+                overlay.classList.remove('show');
+            });
+        });
     }
-};
-
-initDashboardSkeleton();
-
+});

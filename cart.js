@@ -72,37 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.dispatchEvent(new Event('storage'));
     };
 
-    // Apply viewport-based positioning to the mini-cart popup
-    function applyMiniCartResponsive() {
-        if (!miniCart || miniCart.style.display === 'none') return;
-        const vw = window.innerWidth;
-        miniCart.style.boxSizing = 'border-box';
-        miniCart.style.overflowY = 'auto';
-        miniCart.style.position = 'fixed';
-        if (vw <= 480) {
-            miniCart.style.left   = '12px';
-            miniCart.style.right  = '12px';
-            miniCart.style.bottom = '12px';
-            miniCart.style.width  = 'auto';
-            miniCart.style.maxWidth  = 'calc(100vw - 24px)';
-            miniCart.style.maxHeight = '80vh';
-        } else if (vw <= 768) {
-            miniCart.style.left   = '16px';
-            miniCart.style.right  = '16px';
-            miniCart.style.bottom = '16px';
-            miniCart.style.width  = 'auto';
-            miniCart.style.maxWidth  = 'calc(100vw - 32px)';
-            miniCart.style.maxHeight = '85vh';
-        } else {
-            miniCart.style.left   = '';
-            miniCart.style.right  = '30px';
-            miniCart.style.bottom = '30px';
-            miniCart.style.width  = '320px';
-            miniCart.style.maxWidth  = 'calc(100vw - 60px)';
-            miniCart.style.maxHeight = '90vh';
-        }
-    }
-
     window.updateCartUI = function() {
         if (!miniCart) return;
         let storedCart = JSON.parse(localStorage.getItem('cart'));
@@ -111,23 +80,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalItems = 0;
         let subtotal = 0;
         
-        let itemsHtml = `<div class="cart-items-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px; padding-right: 4px;">`;
+        let itemsHtml = `<div class="cart-items-list" style="max-height: 220px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;">`;
         window.cart.forEach((item, index) => {
             let itemPrice = parseInt(item.price) || 0;
             totalItems += item.quantity;
             subtotal += itemPrice * item.quantity;
             
             itemsHtml += `
-                <div class="mini-cart-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; animation: fadeIn 0.3s ease; gap: 8px;">
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 600; font-size: 0.9rem; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-                        <div style="color: var(--orange); font-size: 0.85rem; font-weight: 700;">₹${itemPrice * item.quantity}</div>
+                <div class="mini-cart-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; animation: fadeIn 0.3s ease;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${item.name}</div>
+                        <div style="color: var(--orange); font-size: 0.9rem; font-weight: 700;">₹${itemPrice * item.quantity}</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
                         <button onclick="updateMiniCartQty(${index}, -1)" style="width: 26px; height: 26px; border-radius: 6px; border: none; background: var(--gray-100); color: var(--gray-900); cursor: pointer; font-weight: bold; transition: background 0.2s;">-</button>
-                        <span style="font-size: 0.9rem; font-weight: 600; min-width: 18px; text-align: center;">${item.quantity}</span>
+                        <span style="font-size: 0.95rem; font-weight: 600; min-width: 20px; text-align: center;">${item.quantity}</span>
                         <button onclick="updateMiniCartQty(${index}, 1)" style="width: 26px; height: 26px; border-radius: 6px; border: none; background: var(--gray-100); color: var(--gray-900); cursor: pointer; font-weight: bold; transition: background 0.2s;">+</button>
-                        <button onclick="removeMiniCartItem(${index})" style="background: none; border: none; color: #ef4444; cursor: pointer; margin-left: 2px; font-size: 1rem; transition: transform 0.2s;">🗑️</button>
+                        <button onclick="removeMiniCartItem(${index})" style="background: none; border: none; color: #ef4444; cursor: pointer; margin-left: 4px; font-size: 1.1rem; transition: transform 0.2s;">🗑️</button>
                     </div>
                 </div>
             `;
@@ -140,8 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         miniCart.style.display = 'block';
-        applyMiniCartResponsive();
-
         miniCart.innerHTML = `
             <style>
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
@@ -157,9 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>Subtotal:</span>
                 <strong>₹${subtotal}</strong>
             </div>
-            <div class="mini-cart-btns">
-                <button class="view-cart-btn" style="padding: 12px; background: var(--gray-100); color: var(--gray-900); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%;" onclick="window.location.href='cart.html'">View Cart</button>
-                <button class="checkout-btn" style="padding: 12px; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%;" onclick="localStorage.setItem('cart', JSON.stringify(window.cart)); window.location.href='checkout.html'">Checkout</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="view-cart-btn" style="flex: 1; padding: 12px; background: var(--gray-100); color: var(--gray-900); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="window.location.href='cart.html'">View Cart</button>
+                <button class="checkout-btn" style="flex: 1; padding: 12px; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="localStorage.setItem('cart', JSON.stringify(window.cart)); window.location.href='checkout.html'">Checkout</button>
             </div>
         `;
 
@@ -167,9 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         void miniCart.offsetWidth; // Trigger reflow
         miniCart.classList.add('bounce');
     };
-
-    // Re-apply positioning if viewport is resized (e.g. orientation change)
-    window.addEventListener('resize', () => applyMiniCartResponsive());
 
     addBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -295,160 +259,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(overlay);
     }
 
-    function openSidebar() {
-        hamburger.classList.add('open');
-        navCenter.classList.add('open');
-        overlay.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeSidebar() {
-        hamburger.classList.remove('open');
-        navCenter.classList.remove('open');
-        overlay.classList.remove('show');
-        document.body.style.overflow = '';
-    }
-
     if (hamburger && navCenter && overlay) {
-        // Inject a close (✕) button inside the sidebar if not already present
-        if (!navCenter.querySelector('.sidebar-close-btn')) {
-            const closeBtn = document.createElement('button');
-            closeBtn.className = 'sidebar-close-btn';
-            closeBtn.setAttribute('aria-label', 'Close menu');
-            closeBtn.innerHTML = '&#10005;';
-            closeBtn.style.cssText = [
-                'position:absolute',
-                'top:16px',
-                'right:16px',
-                'width:36px',
-                'height:36px',
-                'border:none',
-                'border-radius:50%',
-                'background:var(--gray-100)',
-                'color:var(--gray-700)',
-                'font-size:1rem',
-                'cursor:pointer',
-                'display:flex',
-                'align-items:center',
-                'justify-content:center',
-                'transition:background 0.2s'
-            ].join(';');
-            closeBtn.addEventListener('mouseenter', () => closeBtn.style.background = 'var(--gray-200)');
-            closeBtn.addEventListener('mouseleave', () => closeBtn.style.background = 'var(--gray-100)');
-            closeBtn.addEventListener('click', closeSidebar);
-            navCenter.insertBefore(closeBtn, navCenter.firstChild);
-        }
-
         hamburger.addEventListener('click', () => {
-            if (navCenter.classList.contains('open')) {
-                closeSidebar();
-            } else {
-                openSidebar();
-            }
+            hamburger.classList.toggle('open');
+            navCenter.classList.toggle('open');
+            overlay.classList.toggle('show');
         });
 
-        // Close when overlay (backdrop) is clicked
-        overlay.addEventListener('click', closeSidebar);
-
-        // Close when any nav link inside sidebar is clicked
-        navCenter.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            navCenter.classList.remove('open');
+            overlay.classList.remove('show');
         });
     }
 });
-
-// ===== CANTEEN MENU PAGES SKELETON LOADER =====
-const initCanteenSkeleton = () => {
-    const mainContent = document.querySelector('.main-content');
-    if (!mainContent) return;
-
-    mainContent.classList.add('content-loading-container');
-
-    const skeletonWrapper = document.createElement('div');
-    skeletonWrapper.className = 'skeleton-wrapper';
-    skeletonWrapper.id = 'canteen-skeleton';
-    skeletonWrapper.setAttribute('aria-hidden', 'true');
-    skeletonWrapper.style.padding = '20px';
-    skeletonWrapper.style.background = '#fff';
-    skeletonWrapper.style.display = 'flex';
-    skeletonWrapper.style.flexDirection = 'column';
-    skeletonWrapper.style.gap = '32px';
-
-    skeletonWrapper.innerHTML = `
-        <!-- Hero Title Skeleton -->
-        <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px;">
-            <div class="skeleton-block" style="width:250px;height:32px;border-radius:6px;"></div>
-            <div class="skeleton-block" style="width:180px;height:16px;border-radius:4px;"></div>
-        </div>
-
-        <!-- Category Filters Skeleton -->
-        <div style="display:flex;gap:12px;flex-wrap:wrap;overflow-x:auto;padding-bottom:10px;">
-            <div class="skeleton-block" style="width:100px;height:38px;border-radius:20px;flex-shrink:0;"></div>
-            <div class="skeleton-block" style="width:90px;height:38px;border-radius:20px;flex-shrink:0;"></div>
-            <div class="skeleton-block" style="width:90px;height:38px;border-radius:20px;flex-shrink:0;"></div>
-            <div class="skeleton-block" style="width:90px;height:38px;border-radius:20px;flex-shrink:0;"></div>
-            <div class="skeleton-block" style="width:100px;height:38px;border-radius:20px;flex-shrink:0;"></div>
-        </div>
-
-        <!-- Food Menu Grid Skeleton -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;">
-            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
-                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
-                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
-                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
-                </div>
-            </div>
-            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
-                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
-                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
-                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
-                </div>
-            </div>
-            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
-                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
-                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
-                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
-                </div>
-            </div>
-            <div style="border:1px solid #f1f5f9;border-radius:20px;overflow:hidden;background:#fff;padding:16px;">
-                <div class="skeleton-block" style="width:100%;height:180px;border-radius:12px;margin-bottom:16px;"></div>
-                <div class="skeleton-block" style="width:50%;height:18px;margin-bottom:8px;"></div>
-                <div class="skeleton-block" style="width:80%;height:14px;margin-bottom:16px;"></div>
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <div class="skeleton-block" style="width:60px;height:20px;"></div>
-                    <div class="skeleton-block" style="width:90px;height:36px;border-radius:18px;"></div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    mainContent.appendChild(skeletonWrapper);
-
-    const hideSkeleton = () => {
-        setTimeout(() => {
-            mainContent.classList.add('loaded');
-            skeletonWrapper.classList.add('fade-out');
-            setTimeout(() => {
-                skeletonWrapper.remove();
-            }, 300);
-        }, 600);
-    };
-
-    if (document.readyState === 'complete') {
-        hideSkeleton();
-    } else {
-        window.addEventListener('load', hideSkeleton);
-    }
-};
-
-initCanteenSkeleton();
-

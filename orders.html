@@ -98,11 +98,16 @@
         .reco-canteen { color: var(--gray-500); font-size: 0.76rem; margin-top: 3px; }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 1199px) {
+            .orders-wrapper { margin: 80px auto 40px; padding: 0 20px; }
+            .order-card { padding: 24px; }
+        }
         @media (max-width: 768px) {
             .orders-wrapper { margin: 80px auto 30px; padding: 0 16px; }
             .page-title { font-size: 1.8rem; margin-bottom: 20px; }
             .order-card { padding: 20px; border-radius: 18px; margin-bottom: 20px; }
-            .order-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .order-header { flex-direction: column; gap: 16px; align-items: stretch; }
+            .order-header > div:last-child { text-align: left !important; display: flex; flex-direction: column; align-items: flex-start; margin-top: 12px; border-top: 1px dashed var(--gray-200); padding-top: 16px; }
             .order-token { font-size: 2rem; }
             .active-badge { font-size: 0.75rem; padding: 4px 12px; border-bottom-left-radius: 12px; }
             .receipt-btn { width: 100%; justify-content: center; padding: 12px; }
@@ -113,8 +118,6 @@
         }
         @media (max-width: 480px) {
             .reco-grid { grid-template-columns: 1fr; }
-            .order-header { flex-direction: column; align-items: stretch; gap: 16px; }
-            .order-header > div:last-child { text-align: left !important; display: flex; flex-direction: column; align-items: flex-start; }
             .order-card { padding: 16px; border-radius: 14px; }
         }
         @media (max-width: 360px) {
@@ -473,84 +476,6 @@
             }, 500);
         };
 
-        // ===== ORDERS SKELETON LOADER =====
-        function initOrdersSkeleton() {
-            const container = document.getElementById('orders-container');
-            if (!container) return;
-
-            container.classList.add('content-loading-container');
-
-            const skeletonWrapper = document.createElement('div');
-            skeletonWrapper.className = 'skeleton-wrapper';
-            skeletonWrapper.id = 'orders-skeleton';
-            skeletonWrapper.setAttribute('aria-hidden', 'true');
-            skeletonWrapper.style.padding = '24px';
-            skeletonWrapper.style.background = '#f8f9fa';
-            skeletonWrapper.style.display = 'flex';
-            skeletonWrapper.style.flexDirection = 'column';
-            skeletonWrapper.style.gap = '24px';
-
-            skeletonWrapper.innerHTML = `
-                <div class="order-card skeleton-container" style="background:#fff;padding:24px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,0.03);">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-                        <div style="display:flex;flex-direction:column;gap:8px;">
-                            <div class="skeleton-block" style="width:120px;height:24px;border-radius:6px;"></div>
-                            <div class="skeleton-block" style="width:200px;height:12px;"></div>
-                            <div class="skeleton-block" style="width:80px;height:18px;border-radius:12px;"></div>
-                            <div class="skeleton-block" style="width:150px;height:12px;margin-top:8px;"></div>
-                        </div>
-                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-                            <div class="skeleton-block" style="width:120px;height:18px;"></div>
-                            <div class="skeleton-block" style="width:60px;height:24px;"></div>
-                            <div class="skeleton-block" style="width:80px;height:80px;border-radius:12px;flex-shrink:0;"></div>
-                        </div>
-                    </div>
-                    <div style="border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:16px 0;margin-bottom:20px;">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                            <div class="skeleton-block" style="width:150px;height:14px;"></div>
-                            <div class="skeleton-block" style="width:50px;height:14px;"></div>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;">
-                            <div class="skeleton-block" style="width:120px;height:14px;"></div>
-                            <div class="skeleton-block" style="width:40px;height:14px;"></div>
-                        </div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 20px;">
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-                            <div class="skeleton-block skeleton-circle" style="width:12px;height:12px;"></div>
-                            <div class="skeleton-block" style="width:60px;height:10px;"></div>
-                        </div>
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-                            <div class="skeleton-block skeleton-circle" style="width:12px;height:12px;"></div>
-                            <div class="skeleton-block" style="width:60px;height:10px;"></div>
-                        </div>
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-                            <div class="skeleton-block skeleton-circle" style="width:12px;height:12px;"></div>
-                            <div class="skeleton-block" style="width:60px;height:10px;"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            container.appendChild(skeletonWrapper);
-
-            const hideSkeleton = () => {
-                setTimeout(() => {
-                    container.classList.add('loaded');
-                    skeletonWrapper.classList.add('fade-out');
-                    setTimeout(() => {
-                        skeletonWrapper.remove();
-                    }, 300);
-                }, 600);
-            };
-
-            if (document.readyState === 'complete') {
-                hideSkeleton();
-            } else {
-                window.addEventListener('load', hideSkeleton);
-            }
-        }
-
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', async () => {
             const params = new URLSearchParams(window.location.search);
@@ -562,7 +487,6 @@
                 window.history.replaceState({}, document.title, 'orders.html');
             }
             renderOrders();
-            initOrdersSkeleton();
 
             // Try to sync from backend every 5s
             async function pollBackend() {
