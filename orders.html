@@ -422,22 +422,7 @@
             });
         }
 
-        // ===== SIMULATE PROGRESS (demo mode) =====
-        function progressOrders() {
-            let orders = JSON.parse(localStorage.getItem('canteenOrders')) || [];
-            let changed = false;
-            orders.forEach(order => {
-                let idx = statuses.indexOf(order.status);
-                if (idx !== -1 && idx < statuses.length - 1 && Math.random() > 0.6) {
-                    order.status = statuses[idx + 1];
-                    changed = true;
-                }
-            });
-            if (changed) {
-                localStorage.setItem('canteenOrders', JSON.stringify(orders));
-                renderOrders();
-            }
-        }
+        // ===== SIMULATE PROGRESS REMOVED =====
 
         // ===== DOWNLOAD RECEIPT =====
         window.downloadReceipt = function(orderId) {
@@ -512,8 +497,6 @@
                     });
                     localStorage.setItem('canteenOrders', JSON.stringify(local));
                     renderOrders();
-                } else {
-                    progressOrders();
                 }
             }
             setInterval(pollBackend, 5000);

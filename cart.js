@@ -135,6 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
         miniCart.classList.add('bounce');
     };
 
+    window.addToCart = function(dishName, price, canteen) {
+        const availData = JSON.parse(localStorage.getItem('dishAvail_' + canteen) || '{}');
+        if (availData[dishName] === false) {
+            alert('Sorry, this item is currently out of stock.');
+            return false;
+        }
+        return true;
+    };
+
     addBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const card = e.target.closest('.food-card');
@@ -146,6 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const img = card.querySelector('.food-img').src;
             const id = name.toLowerCase().replace(/\s+/g, '-');
+
+            const canteen = defaultCanteen;
+            if (window.addToCart && !window.addToCart(name, price, canteen)) {
+                return;
+            }
 
             let storedCart = JSON.parse(localStorage.getItem('cart'));
             window.cart = Array.isArray(storedCart) ? storedCart : [];
@@ -159,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     price: price,
                     quantity: 1,
                     img: img,
-                    canteen: defaultCanteen
+                    canteen: canteen
                 });
             }
 
