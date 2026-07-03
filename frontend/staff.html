@@ -723,18 +723,16 @@ function applyStoreStatusUI(status) {
 async function fetchOrders() {
   if (ordersPaused) return;
   try {
-    const res = await fetch(`${API}/api/staff/orders`, {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('staffToken'),
-        'Content-Type': 'application/json'
-      }
-    });
+    const res = await fetch(`${API}/api/orders`);
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
     const prevCount = allOrders.length;
 
-    // The backend automatically filters orders based on the staff's token
-    allOrders = data;
+    // Filter to this store only
+    allOrders = data.filter(o => {
+      const normalized = normalizeStoreName(o.canteen || '');
+      return normalized === assignedStore;
+    });
 
     // Check for new orders
     if (allOrders.length > prevCount && prevCount > 0) {
@@ -1035,13 +1033,10 @@ async function updateOrderStatus(id, newStatus, btnEl) {
 
   try {
     // Try real backend
-    const res = await fetch(`${API}/api/staff/orders/${id}/status`, {
-      method:  'PATCH',
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('staffToken'),
-        'Content-Type': 'application/json'
-      },
-      body:    JSON.stringify({ status: newStatus })
+    const res = await fetch(`${API}/api/orders/${id}`, {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ orderStatus: newStatus })
     });
     if (!res.ok) throw new Error('API error');
   } catch (e) {
@@ -1074,13 +1069,9 @@ async function markAllReady() {
 
   for (const o of toMark) {
     try {
-      await fetch(`${API}/api/staff/orders/${o._id}/status`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('staffToken'),
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status: 'Ready' })
+      await fetch(`${API}/api/orders/${o._id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderStatus: 'Ready' })
       });
     } catch (e) { /* local fallback */ }
     allOrders = allOrders.map(ord => ord._id === o._id ? { ...ord, orderStatus: 'Ready' } : ord);
